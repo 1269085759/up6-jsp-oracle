@@ -288,7 +288,7 @@ public class fd_appender
 	            f.pos = rs.getLong("f_pos");
 	            f.complete = rs.getBoolean("f_complete");
 	            f.md5 = rs.getString("f_md5");
-	            this.svr_files.put(f.md5, f);
+	            if(!StringUtils.isEmpty(f.md5)) this.svr_files.put(f.md5, f);
 	        }
 	        rs.close();
 	        cmd.close();

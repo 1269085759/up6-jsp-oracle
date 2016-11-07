@@ -1090,6 +1090,7 @@ function HttpUploaderMgr()
 	    if (this.Exist(fdLoc.pathLoc)) return;
         //文件夹为空
 	    if (json.files == null) return;
+	    if (json.lenLoc == 0) return;
 
 	    var idLoc = this.idCount++;
 		this.AppendQueue(idLoc);//添加到队列

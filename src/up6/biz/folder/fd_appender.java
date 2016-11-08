@@ -60,11 +60,16 @@ public class fd_appender
 	{
         this.get_md5s();//提取所有文件的MD5
         this.make_ids();        
-        this.get_md5_files();//查询相同MD5值。
+        //增加对空文件夹和0字节文件夹的处理
+        if(this.m_md5s.length() > 1) this.get_md5_files();//查询相同MD5值。
 
         this.set_ids();     //设置文件和文件夹id
         this.update_rel();  //更新结构关系
 
+        //对空文件夹的处理，或者0字节文件夹的处理
+        if(this.m_root.lenLoc == 0) this.m_root.complete = true;
+        if(this.m_root.files.size() == 0) this.m_root.complete = true;
+        
         //更新文件夹信息
         this.pre_udpate_fd();
         for(int i = 0 , l = this.m_root.folders.size();i<l;++i)        
@@ -100,7 +105,7 @@ public class fd_appender
         }
         this.update_file(this.m_root);
         this.cmd_update_file.close();
-        this.con.close();//关闭连接
+        this.con.close();//关闭连接        
 	}
 
     protected void get_md5s()
@@ -111,7 +116,7 @@ public class fd_appender
         for(int i=0,l=this.m_root.files.size();i<l;++i)
         {        
         	fd_file f = this.m_root.files.get(i);
-            if( !md5s.containsKey(f.md5) )
+            if( !md5s.containsKey(f.md5) && StringUtils.isEmpty(f.md5))
             {
                 md5s.put(f.md5, true);
                 md5_arr.add("'" + f.md5 + "'");

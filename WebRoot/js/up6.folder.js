@@ -33,7 +33,7 @@ function FolderUploader(idLoc, fdLoc, mgr)
     this.svr_create = function (fdSvr)
     {
 		jQuery.extend(this.folderSvr,fdSvr);
-        if (null == fdSvr.files)
+        if (fdSvr.complete)
         {
             this.all_complete();
             return;
@@ -95,7 +95,7 @@ function FolderUploader(idLoc, fdLoc, mgr)
         this.ui.btn.cancel.text("续传").show();
         this.ui.msg.text(HttpUploaderErrorCode[json.value]);
         //文件大小超过限制,文件大小为0
-        if (10 == json.value || 201 == json.value){}
+        if (4 == json.value || 5 == json.value){}
         else{}
         this.State = HttpUploaderState.Error;
         setTimeout(function () { _this.post_next(); }, 500);

@@ -116,7 +116,7 @@ public class fd_appender
         for(int i=0,l=this.m_root.files.size();i<l;++i)
         {        
         	fd_file f = this.m_root.files.get(i);
-            if( !md5s.containsKey(f.md5) && StringUtils.isEmpty(f.md5))
+            if( !md5s.containsKey(f.md5) && !StringUtils.isEmpty(f.md5))
             {
                 md5s.put(f.md5, true);
                 md5_arr.add("'" + f.md5 + "'");

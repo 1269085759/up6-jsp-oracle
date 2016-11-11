@@ -23,6 +23,7 @@ var HttpUploaderErrorCode = {
 	, "3": "域名未授权"
 	, "4": "文件大小超过限制"
 	, "5": "文件大小为0"
+	, "6": "文件被占用"
 };
 var up6_err_solve = {
     errFolderCreate: "请检查UrlFdCreate地址配置是否正确\n请检查浏览器缓存是否已更新\n请检查数据库是否创建\n请检查数据库连接配置是否正确"
@@ -86,7 +87,7 @@ function HttpUploaderMgr()
         , "Cookie"			: ""//服务器cookie
         , "QueueCount"      : 1//同时上传的任务数
 		//文件夹操作相关
-		, "UrlFdCreate"		: "http://localhost:8080/Uploader6.3Oracle/db/fd_create.jsp"
+		, "UrlFdCreate"		: "http://localhost:8080/Uploader6.3Oracle/db/fd_create_uuid.jsp"
 		, "UrlFdComplete"	: "http://localhost:8080/Uploader6.3Oracle/db/fd_complete.jsp"
 		, "UrlFdDel"	    : "http://localhost:8080/Uploader6.3Oracle/db/fd_del.jsp"
 		//文件操作相关

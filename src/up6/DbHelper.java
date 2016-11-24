@@ -8,11 +8,11 @@ public class DbHelper {
 	//当前项目路径。D:\\WebApps\\HttpUploader3\\
 	String m_curPath;
 
-	String m_dbDriver = "oracle.jdbc.driver.OracleDriver";
+	public String m_dbDriver = "oracle.jdbc.driver.OracleDriver";
 	//数据库连接字符串
-	String m_dbUrl = "jdbc:oracle:thin:@localhost:1521:orcl";
-	String m_dbName = "system";//数据库帐号
-	String m_dbPass = "123456";//数据库密码
+	public String m_dbUrl = "jdbc:oracle:thin:@localhost:1521:orcl";
+	public String m_dbName = "system";//数据库帐号
+	public String m_dbPass = "123456";//数据库密码
 
 	public DbHelper()
 	{

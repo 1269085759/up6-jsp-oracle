@@ -24,20 +24,18 @@
 
 DbHelper db = new DbHelper();
 Connection con = db.GetCon();
-CallableStatement cmd = con.prepareCall("{call fd_files_add_batch(?,?,?,?)}");
-cmd.setInt(1, 1);
-cmd.setInt(2, 1);
-cmd.registerOutParameter(3, OracleTypes.ARRAY,"ARRAY_INT");
-cmd.registerOutParameter(4, OracleTypes.ARRAY,"ARRAY_INT");        
-cmd.execute();
-ARRAY arr_f = ((OracleCallableStatement)cmd).getARRAY(3);
-int[] arr1 = arr_f.getIntArray();
-out.write( String.valueOf(arr1.length));
-for(int i = 0 ,l=arr1.length;i<l;++i)
+CallableStatement cmd = con.prepareCall("{call fd_files_check(?)}");
+ArrayDescriptor des = ArrayDescriptor.createDescriptor("ARRAY_MD5",con);
+String array[] = {"12f3513171af39873fde601d093636f9"};
+ARRAY arr_md5 = new ARRAY(des,con,array);
+
+cmd.setArray(1,arr_md5);        
+ResultSet rs = cmd.executeQuery();
+if(rs.next())
 {
-	out.write(String.valueOf(arr1[i]) );
+	out.write( rs.getInt(1));
 }
-ARRAY arr_fd = ((OracleCallableStatement)cmd).getARRAY(4);        
+rs.close();
 //String[] ids_f = (String[])arr_f.getArray();
 //XDebug.Output("文件ID", ids_f);
 //String[] ids_fd  = (String[])arr_fd.getArray();

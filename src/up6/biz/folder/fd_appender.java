@@ -14,6 +14,8 @@ import java.util.Map;
 import oracle.jdbc.OracleCallableStatement;
 import oracle.jdbc.OracleTypes;
 import oracle.sql.ARRAY;
+import oracle.sql.ArrayDescriptor;
+
 import org.apache.commons.lang.StringUtils;
 
 import up6.DbHelper;
@@ -43,17 +45,17 @@ public class fd_appender
 	protected Map<Integer,Integer> map_fd_ids;
 	Map<String,fd_file> svr_files;
 	public fd_root m_root;
-	private String m_md5s;
+	private List<String> m_md5s;
 	
 	public fd_appender()
 	{
 		this.db = new DbHelper();
-		this.con = this.db.GetCon();
-		this.m_md5s = "";
+		this.con = this.db.GetCon();		
 		this.pb = new PathMd5Builder();
 		this.map_pids = new HashMap<Integer,Integer>();
 		this.map_fd_ids = new HashMap<Integer,Integer>();
 		this.svr_files = new HashMap<String,fd_file>();
+		this.m_md5s = new ArrayList<String>();
 	}
 	
 	public void save() throws SQLException, IOException
@@ -61,7 +63,7 @@ public class fd_appender
         this.get_md5s();//提取所有文件的MD5
         this.make_ids();        
         //增加对空文件夹和0字节文件夹的处理
-        if(this.m_md5s.length() > 1) this.get_md5_files();//查询相同MD5值。
+        if(this.m_md5s.size() > 1) this.get_md5_files();//查询相同MD5值。
 
         this.set_ids();     //设置文件和文件夹id
         this.update_rel();  //更新结构关系
@@ -109,8 +111,7 @@ public class fd_appender
 
     protected void get_md5s()
     {
-        Map<String, Boolean> md5s = new HashMap<String, Boolean>();
-        List<String> md5_arr = new ArrayList<String>();        
+        Map<String, Boolean> md5s = new HashMap<String, Boolean>();                
         
         for(int i=0,l=this.m_root.files.size();i<l;++i)
         {        
@@ -118,10 +119,9 @@ public class fd_appender
             if( !md5s.containsKey(f.md5) && !StringUtils.isEmpty(f.md5))
             {
                 md5s.put(f.md5, true);
-                md5_arr.add("'" + f.md5 + "'");
+                this.m_md5s.add(f.md5);
             }
-        }
-        this.m_md5s = StringUtils.join( md5_arr.toArray(),",");
+        }        
     }
 
     void make_ids() throws SQLException
@@ -266,13 +266,20 @@ public class fd_appender
 
     protected void get_md5_files() 
     {
-        String sql =" select * from ( select * from up6_files where f_idSvr in ( select max(f_idSvr) from up6_files group by f_md5 ) )fs where f_md5 in( " + this.m_md5s + " ) ";
+        String sql ="{call fd_files_check(?,?)}";
 
-        PreparedStatement cmd;
+        CallableStatement cmd;
 		try 
 		{
-			cmd = this.con.prepareStatement(sql);        
-	        ResultSet rs = cmd.executeQuery();        
+			cmd = this.con.prepareCall(sql);
+
+			ArrayDescriptor des = ArrayDescriptor.createDescriptor("ARRAY_MD5",this.con);
+			ARRAY md5_arr = new ARRAY(des,con,this.m_md5s);
+			
+			cmd.setArray(1,md5_arr);
+			cmd.registerOutParameter(2,OracleTypes.CURSOR);
+			cmd.execute();
+			ResultSet rs = (ResultSet)cmd.getObject(2);
 	        while(rs.next())
 	        {
 	            fd_file f = new fd_file();

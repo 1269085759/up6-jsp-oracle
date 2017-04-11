@@ -274,7 +274,7 @@ public class fd_appender
 			cmd = this.con.prepareCall(sql);
 
 			ArrayDescriptor des = ArrayDescriptor.createDescriptor("ARRAY_MD5",this.con);
-			ARRAY md5_arr = new ARRAY(des,con,this.m_md5s);
+			ARRAY md5_arr = new ARRAY(des,con,this.m_md5s.toArray());
 			
 			cmd.setArray(1,md5_arr);
 			cmd.registerOutParameter(2,OracleTypes.CURSOR);

@@ -10,7 +10,7 @@ CREATE or replace TYPE ARRAY_MD5 AS TABLE OF VARCHAR2(40);          -- Array of 
 create or replace procedure fd_files_check(  
  l_md5 in ARRAY_MD5--md5列表，项目需要引入nls_charset12.jar，否则字符串元素为空。
  ,files out sys_refcursor)
-)is
+is
 begin
 	open files for select * from up6_files where f_md5 in( select column_value from table( l_md5 ) );	  
 end;

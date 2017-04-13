@@ -116,7 +116,6 @@ public class fd_appender
         for(int i=0,l=this.m_root.files.size();i<l;++i)
         {        
         	fd_file f = this.m_root.files.get(i);
-        	XDebug.Output("文件md5:"+f.md5);
             if( !md5s.containsKey(f.md5) && !StringUtils.isEmpty(f.md5))
             {
                 md5s.put(f.md5, true);
@@ -276,7 +275,6 @@ public class fd_appender
 
 			ArrayDescriptor des = ArrayDescriptor.createDescriptor("ARRAY_MD5",this.con);
 			ARRAY md5_arr = new ARRAY(des,con,this.m_md5s.toArray());
-			XDebug.Output("文件md5:"+this.m_md5s.get(0));
 			
 			cmd.setArray(1,md5_arr);
 			cmd.registerOutParameter(2,OracleTypes.CURSOR);

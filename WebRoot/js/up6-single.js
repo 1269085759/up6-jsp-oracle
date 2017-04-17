@@ -191,7 +191,7 @@ function HttpUploaderMgr()
 	    else if (json.name == "load_complete") { _this.load_complete(); }
 	};
 		
-    //IE浏览器信息管理对象
+    //浏览器
 	this.browser = {
 	    entID: "Uploader6Event"
 		, check: function ()//检查插件是否已安装

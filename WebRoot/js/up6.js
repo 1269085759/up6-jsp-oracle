@@ -89,7 +89,7 @@ function HttpUploaderMgr()
         , "Cookie"			: ""//服务器cookie
         , "QueueCount"      : 1//同时上传的任务数
 		//文件夹操作相关
-		, "UrlFdCreate"		: "http://localhost:8080/Uploader6.3Oracle/db/fd_create_uuid.jsp"
+		, "UrlFdCreate"		: "http://localhost:8080/Uploader6.3Oracle/db/fd_create.jsp"
 		, "UrlFdComplete"	: "http://localhost:8080/Uploader6.3Oracle/db/fd_complete.jsp"
 		, "UrlFdDel"	    : "http://localhost:8080/Uploader6.3Oracle/db/fd_del.jsp"
 		//文件操作相关

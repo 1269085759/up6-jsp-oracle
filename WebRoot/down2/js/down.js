@@ -286,6 +286,9 @@ function DownloaderMgr()
 	    return v;
 	};
 	this.remove_url = function (url) { this.filesUrl.remove(url); };
+	this.open_folder = function(json){
+		//alert(json.path);用户选择的下载路径		
+	};
 	this.open_folder = function (json)
 	{
 	    this.app.openFolder();
@@ -363,7 +366,7 @@ function DownloaderMgr()
 	{
 	    var json = JSON.parse(str);
 	         if (json.name == "open_files") { _this.open_files(json); }
-	    else if (json.name == "open_folder") { _this.open_folders(json); }
+	    else if (json.name == "open_folder") { _this.open_folder(json); }
 	    else if (json.name == "down_recv_size") { _this.down_recv_size(json); }
 	    else if (json.name == "down_recv_name") { _this.down_recv_name(json); }
 	    else if (json.name == "init_end") { _this.init_end(json); }

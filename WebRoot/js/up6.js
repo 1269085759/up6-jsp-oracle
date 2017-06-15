@@ -377,6 +377,7 @@ function HttpUploaderMgr()
         com += '<object name="droper" classid="clsid:' + this.Config.ie.drop.clsid + '"';
         com += ' codebase="' + this.Config.ie.path + '#version=' + this.Config.Version + '" width="192" height="192" >';
         com += '</object>';
+        if (this.edge) com = '';
 	    //文件夹选择控件
         com += '<object name="parter" classid="clsid:' + this.Config.ie.part.clsid + '"';
 	    com += ' codebase="' + this.Config.ie.path + '#version=' + this.Config.Version + '" width="1" height="1" ></object>';
@@ -571,7 +572,7 @@ function HttpUploaderMgr()
 	    {
 	        jQuery.extend(this.Config.ie, this.Config.ie64);
 	    }
-	    else if (this.firefox)
+	    if (this.firefox)
 	    {
 	        if (!this.app.checkFF())//仍然支持npapi
             {

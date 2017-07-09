@@ -1,4 +1,4 @@
---drop table hup_folders
+--drop table down_folders
 CREATE TABLE down_folders
 (
    fd_id				number NOT NULL   		 --文件夹ID，自动编号

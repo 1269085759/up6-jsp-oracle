@@ -1,10 +1,9 @@
 /*
 	类型参考：http://www.cnblogs.com/kerrycode/p/3265120.html
 	更新记录：
-		2015-11-10 将注释改为/**/方式
 		2016-04-11 完善字段
 */
-drop table up6_files;
+--drop table up6_files;
 CREATE TABLE up6_files
 (
 	 f_idSvr			number NOT NULL			 /*文件ID，唯一。由于f_fid与oracle数据库字段有冲突，现改为f_idSign*/
@@ -33,37 +32,8 @@ CREATE TABLE up6_files
 --创建主键
 ALTER TABLE up6_files ADD CONSTRAINT PK_up6_files PRIMARY KEY(f_idSvr);
 
---创建存储过程
-create or replace procedure f_process(
- posSvr in number
-,lenSvr in number
-,perSvr in varchar2
-,uidSvr in number
-,fidSvr in number
-,complete in number)is
-begin
-  update up6_files
-  set f_pos=posSvr,f_lenSvr=lenSvr,f_perSvr=perSvr,f_complete=complete
-  where f_uid=uidSvr and f_idSvr=fidSvr;
-end;
-
---更新文件夹进度
-create or replace procedure fd_process(
- uidSvr in number
-,fd_idSvr in number
-,fd_lenSvr in number
-,fd_perSvr in varchar2
-)is
-begin
-	/*更新文件进度*/
-  update up6_files
-  set f_lenSvr=fd_lenSvr,f_perSvr=fd_perSvr
-  where f_uid=uidSvr and f_idSvr=fd_idSvr;
-end;
-
-
 --创建自动编号列
-DROP SEQUENCE SEQ_f_idSvr;
+--DROP SEQUENCE SEQ_f_idSvr;
 CREATE SEQUENCE SEQ_f_idSvr 
        MINVALUE 1
        START WITH 1

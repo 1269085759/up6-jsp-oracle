@@ -19,17 +19,3 @@ CREATE TABLE up6_folders
 	  ,fd_pidRoot			number default 0		 /*根级ID*/
 	  ,fd_pathRel			varchar2(255) default ''  /*相对路径。基于顶级节点。root\\child\\self*/
 );
-
---创建主键
-ALTER TABLE up6_folders ADD CONSTRAINT PK_up6_folders PRIMARY KEY(fd_id);
-
---创建自动编号列
---DROP SEQUENCE SEQ_fd_id
-CREATE SEQUENCE SEQ_fd_id 
-       MINVALUE 1
-       START WITH 1
-       NOMAXVALUE
-       INCREMENT BY 1
-       NOCYCLE
-       CACHE 30
-;

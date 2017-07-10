@@ -28,17 +28,3 @@ CREATE TABLE up6_files
 	,f_time  			DATE DEFAULT sysdate     /*文件上传时间*/
 	,f_deleted  		number(1) DEFAULT 0    /*是否已删除。*/
 );
-
---创建主键
-ALTER TABLE up6_files ADD CONSTRAINT PK_up6_files PRIMARY KEY(f_idSvr);
-
---创建自动编号列
---DROP SEQUENCE SEQ_f_idSvr;
-CREATE SEQUENCE SEQ_f_idSvr 
-       MINVALUE 1
-       START WITH 1
-       NOMAXVALUE
-       INCREMENT BY 1
-       NOCYCLE
-       CACHE 30
-;

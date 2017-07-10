@@ -5,7 +5,6 @@
 -- Description:  一次性分配所有的文件和文件夹ID
 -- =============================================
 */
-CREATE TYPE ARRAY_INT AS TABLE OF NUMBER;          -- Array of integers
 --
 create or replace procedure fd_files_add_batch(  
    f_count in number      --文件总数，要单独增加一个文件夹

@@ -5,7 +5,6 @@
 -- Description: 批量检查文件是否存在，提供给文件夹上传使用
 -- =============================================
 */
-CREATE or replace TYPE ARRAY_MD5 AS TABLE OF VARCHAR2(40);          -- Array of integers
 --
 create or replace procedure fd_files_check(  
  l_md5 in ARRAY_MD5--md5列表，项目需要引入nls_charset12.jar，否则字符串元素为空。

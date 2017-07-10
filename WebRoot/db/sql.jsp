@@ -86,36 +86,15 @@ if(dir.exists())
 					buffer.append(text + "\n");
 				}
 				String sb = buffer.toString();
-				String filename = file.getName().substring(0,file.getName().lastIndexOf("."));
-				if(filename.equalsIgnoreCase("up6_files") || filename.equalsIgnoreCase("up6_folders"))
-				{
-					String tab = sb.substring(sb.indexOf("CREATE TABLE"),sb.indexOf(";",sb.indexOf("CREATE TABLE")));
-					String key = sb.substring(sb.indexOf("ALTER TABLE"),sb.indexOf(";",sb.indexOf("ALTER TABLE")));
-					String seq = sb.substring(sb.indexOf("CREATE SEQUENCE"),sb.indexOf(";",sb.indexOf("CREATE SEQUENCE")));
-					db.ExecuteNonQuery(tab);
-					db.ExecuteNonQuery(key);
-					db.ExecuteNonQuery(seq);
-					//XDebug.Output("tab",filename);
-				}
-				else if(filename.equalsIgnoreCase("fd_files_add_batch") || filename.equalsIgnoreCase("fd_files_check"))
-				{
-					String ctp = sb.substring(sb.indexOf("CREATE"),sb.indexOf(";",sb.indexOf("CREATE")));
-					String cpd = sb.substring(sb.lastIndexOf("create"),sb.lastIndexOf(";"));
-					db.ExecuteNonQuery(ctp);
-					db.ExecuteNonQuery(cpd);
-					//XDebug.Output("pdu",filename);
-				}
-				else
-				{
-					db.ExecuteNonQuery(sb);
-					//XDebug.Output("pdu",filename);
-				}
+				db.ExecuteNonQuery(sb);
+				XDebug.Output("sql",sb);
+				XDebug.Output("sql",file.getName());
 			}
 		}
 	}
 }
 
-dir = new File(downDir);
+/*dir = new File(downDir);
 if(dir.exists())
 {
 	File[] files = dir.listFiles();
@@ -134,24 +113,11 @@ if(dir.exists())
 					buffer.append(text + "\n");
 				}
 				String sb = buffer.toString();
-				String filename = file.getName().substring(0,file.getName().lastIndexOf("."));
-				if(filename.equalsIgnoreCase("down_files") || filename.equalsIgnoreCase("down_folders"))
-				{
-					String tab = sb.substring(sb.indexOf("CREATE TABLE"),sb.indexOf(";",sb.indexOf("CREATE TABLE")));
-					String key = sb.substring(sb.indexOf("ALTER TABLE"),sb.indexOf(";",sb.indexOf("ALTER TABLE")));
-					String seq = sb.substring(sb.indexOf("CREATE SEQUENCE"),sb.indexOf(";",sb.indexOf("CREATE SEQUENCE")));
-					db.ExecuteNonQuery(tab);
-					db.ExecuteNonQuery(key);
-					db.ExecuteNonQuery(seq);
-				}
-				else
-				{
-					db.ExecuteNonQuery(sb);
-				}
+				db.ExecuteNonQuery(sb);
 			}
 		}
 	}
-}
+}*/
 out.write("数据库初始化完毕");
 %>
 

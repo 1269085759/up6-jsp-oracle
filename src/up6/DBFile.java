@@ -263,7 +263,7 @@ public class DBFile {
 		boolean ret = false;
 		StringBuilder sb = new StringBuilder();
 		sb.append("select ");
-		sb.append(" f_idSvr");
+		sb.append(" f_id");
 		sb.append(",f_uid");
 		sb.append(",f_nameLoc");
 		sb.append(",f_nameSvr");

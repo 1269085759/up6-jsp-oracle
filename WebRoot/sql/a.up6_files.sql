@@ -26,4 +26,4 @@ CREATE TABLE up6_files
 	,f_complete  		number(1) DEFAULT 0    /*是否已上传完毕。*/
 	,f_time  			DATE DEFAULT sysdate     /*文件上传时间*/
 	,f_deleted  		number(1) DEFAULT 0    /*是否已删除。*/
-);
+)

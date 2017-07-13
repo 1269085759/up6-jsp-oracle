@@ -770,15 +770,15 @@ public class DBFile {
 	/// </summary>
 	/// <param name="uid"></param>
 	/// <param name="fid"></param>
-	public void Delete(int uid,int fid)
+	public void Delete(int uid,String fid)
 	{
-		String sql = "update up6_files set f_deleted=1 where f_uid=? and f_idSvr=?";
+		String sql = "update up6_files set f_deleted=1 where f_uid=? and f_id=?";
 		DbHelper db = new DbHelper();
 		PreparedStatement cmd = db.GetCommand(sql);
 
 		try {
 			cmd.setInt(1, uid);
-			cmd.setInt(2, fid);
+			cmd.setString(2, fid);
 			db.ExecuteNonQuery(cmd);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

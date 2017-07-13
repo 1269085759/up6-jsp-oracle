@@ -39,7 +39,6 @@
 String uid 			= request.getHeader("uid");//
 String id 			= request.getHeader("id");
 String md5 			= request.getHeader("md5");
-String perSvr 		= request.getHeader("perSvr");
 String lenSvr		= request.getHeader("lenSvr");
 String lenLoc		= request.getHeader("lenLoc");
 String blockOffset	= request.getHeader("blockOffset");
@@ -86,13 +85,11 @@ if(	 StringUtils.isBlank( lenSvr )
 	XDebug.Output("param is null");
 	return;
 }
-	
-	boolean cmp = StringUtils.equals(complete,"true");
-	
-	//保存文件块数据
-	FileResumerPart res = new FileResumerPart();
-	res.m_RangePos = Long.parseLong(blockOffset);
-	res.SaveFileRange(rangeFile, pathSvr);	
+
+//保存文件块数据
+FileResumerPart res = new FileResumerPart();
+res.m_RangePos = Long.parseLong(blockOffset);
+res.SaveFileRange(rangeFile, pathSvr);	
 			
-	out.write("ok");
+out.write("ok");
 %>

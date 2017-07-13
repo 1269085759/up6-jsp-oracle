@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import up6.FileResumerPart;
 import up6.PathTool;
-import up6.biz.PathUuidBuilder;
+import up6.biz.PathBuilderUuid;
 import up6.model.FileInf;
 
 /**
@@ -18,7 +18,7 @@ public class fd_uuid_appender extends fd_appender
 {
 	public fd_uuid_appender()
 	{
-		this.pb = new PathUuidBuilder();
+		this.pb = new PathBuilderUuid();
 	}
 
     public void save() throws IOException, SQLException

@@ -10,7 +10,7 @@ import up6.model.FolderInf;
 import up6.model.FileInf;
 
 
-public class PathMd5Builder extends PathBuilder {
+public class PathBuilderMd5 extends PathBuilder {
 	public String genFolder(int uid,FolderInf fd){return "";}
 	/* 所有文件均以md5模式存储
 	 * 格式：

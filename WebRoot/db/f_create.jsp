@@ -6,8 +6,7 @@
 	page import="up6.biz.*" %><%@	
 	page import="org.apache.commons.lang.StringUtils" %><%@
 	page import="java.net.URLDecoder" %><%@
-	page import="java.net.URLEncoder" %><%
-/*
+	page import="java.net.URLEncoder" %><%/*
 	所有单个文件均以md5模式存储。
 	更新记录：
 		2012-05-24 完善
@@ -45,7 +44,7 @@ fileSvr.md5 = md5;
 fileSvr.nameSvr = md5 + "." + PathTool.getExtention(fileSvr.nameLoc);
 
 //所有单个文件均以md5方式存储
-PathMd5Builder pb = new PathMd5Builder();
+PathBuilderMd5 pb = new PathBuilderMd5();
 fileSvr.pathSvr = pb.genFile(fileSvr.uid,fileSvr);
 
 	DBFile db = new DBFile();
@@ -75,5 +74,4 @@ String json = gson.toJson(fileSvr);
 json = URLEncoder.encode(json,"UTF-8");//编码，防止中文乱码
 json = json.replace("+","%20");
 json = callback + "({\"value\":\"" + json + "\"})";//返回jsonp格式数据。
-out.write(json);
-%>
+out.write(json);%>

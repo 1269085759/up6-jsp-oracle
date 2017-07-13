@@ -20,7 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import up6.DbHelper;
 import up6.PathTool;
 import up6.biz.PathBuilder;
-import up6.biz.PathMd5Builder;
+import up6.biz.PathBuilderMd5;
 import up6.model.FileInf;
 
 /**
@@ -47,7 +47,7 @@ public class fd_appender
 	{
 		this.db = new DbHelper();
 		this.con = this.db.GetCon();		
-		this.pb = new PathMd5Builder();
+		this.pb = new PathBuilderMd5();
 		this.map_pids = new HashMap<Integer,Integer>();
 		this.map_fd_ids = new HashMap<Integer,Integer>();
 		this.svr_files = new HashMap<String,FileInf>();

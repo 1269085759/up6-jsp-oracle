@@ -3,8 +3,10 @@ package up6.biz.folder;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import up6.FileResumerPart;
 import up6.PathTool;
 import up6.biz.PathUuidBuilder;
+import up6.model.FileInf;
 
 /**
  * uuid模式会在服务端创建文件夹层级结构，所有文件以原始名称命名。
@@ -25,6 +27,18 @@ public class fd_uuid_appender extends fd_appender
         PathTool.createDirectory(this.m_root.pathSvr);
 
         super.save();
+        
+        //创建目录
+        for(FileInf fd : this.m_root.folders)
+        {
+        	PathTool.createDirectory(fd.pathSvr);
+        }
+        //创建文件
+        for(FileInf f : this.m_root.files)
+        {
+    		FileResumerPart fr = new FileResumerPart();
+    		fr.CreateFile(f.pathSvr);		
+        }
     }
     protected void get_md5s(){}//不查询重复文件
     protected void get_md5_files() { }//不查询重复文件

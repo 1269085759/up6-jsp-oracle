@@ -83,7 +83,7 @@ public class fd_appender
         this.con.close();//关闭连接        
 	}
 	
-	void save_file(FileInf f)
+	protected void save_file(FileInf f)
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("insert into up6_files (");
@@ -173,7 +173,7 @@ public class fd_appender
 		}//
 	}
 	
-	void save_folder(FileInf f)
+	protected void save_folder(FileInf f)
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("insert into up6_files (");

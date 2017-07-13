@@ -69,7 +69,7 @@ public class fd_appender
         this.save_folder(this.m_root);
         for(FileInf f : this.m_root.files)
         {
-        	f.pathSvr = PathTool.combine(this.m_root.pathSvr, f.pathRel);
+        	f.pathSvr = this.pb.genFile(this.m_root.uid, f.md5, f.nameLoc);
         	this.save_file(f);
         }
         for(FileInf fd : this.m_root.folders)
@@ -80,7 +80,7 @@ public class fd_appender
 
         this.cmd_add_f.close();
         this.cmd_add_fd.close();
-        this.con.close();//关闭连接        
+        this.con.close();//关闭连接
 	}
 	
 	protected void save_file(FileInf f)

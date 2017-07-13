@@ -6,12 +6,11 @@
 --drop table up6_files;
 CREATE TABLE up6_files
 (
-	 f_idSvr			number NOT NULL			 /*文件ID，唯一。由于f_fid与oracle数据库字段有冲突，现改为f_idSign*/
-	,f_pid				number DEFAULT 0		 /**/
-	,f_pidRoot			number DEFAULT 0		 /*根级文件夹ID*/
-	,f_fdTask			number(1) DEFAULT 0	 	 /*表示是否是一个文件夹上传任务。提供给 ajax_f_list.jsp使用*/
-	,f_fdID				number DEFAULT '0'		 /*文件夹详细ID，与hub_folders.fd_id对应*/
-	,f_fdChild			number DEFAULT '0'		 /*是文件夹中的子项*/
+	 f_id				varchar2(32) NOT NULL			 /*文件ID，唯一。由于f_fid与oracle数据库字段有冲突，现改为f_idSign*/
+	,f_pid				varchar2(32) DEFAULT ''		 /**/
+	,f_pidRoot			varchar2(32) DEFAULT ''		 /*根级文件夹ID*/
+	,f_fdTask			number(1) DEFAULT 0	 	 /*表示是否是一个文件夹上传任务。提供给 ajax_f_list.jsp使用*/	
+	,f_fdChild			number(1) DEFAULT '0'		 /*是文件夹中的子项*/
 	,f_uid  			number DEFAULT '0'   	 /*用户ID*/
 	,f_nameLoc 			varchar2(255)  DEFAULT '' /*文件在本地电脑中的名称。例：QQ.exe*/ 
 	,f_nameSvr  		varchar2(255)  DEFAULT '' /*文件在服务器中的名称。一般为文件MD5+扩展名。*/

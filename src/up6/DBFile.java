@@ -655,7 +655,7 @@ public class DBFile {
 	static public void fd_complete(String fid, String uid)
 	{
 		String sql = "begin ";
-		sql += "update up6_files set f_perSvr='100%' ,f_complete=1 where f_idSvr=?;";
+		sql += "update up6_files set f_perSvr='100%' ,f_complete=1 where f_id=?;";
 		sql += "update up6_folders set fd_complete=1 where fd_id=? and fd_uid=?;";
 		sql += "end;";
 		

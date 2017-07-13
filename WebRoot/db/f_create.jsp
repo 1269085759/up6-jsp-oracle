@@ -35,7 +35,6 @@ if (	StringUtils.isBlank(md5)
 }
 
 xdb_files fileSvr= new xdb_files();
-fileSvr.f_fdChild = false;
 fileSvr.uid = Integer.parseInt(uid);
 fileSvr.nameLoc = PathTool.getName(pathLoc);
 fileSvr.pathLoc = pathLoc;
@@ -60,11 +59,11 @@ fileSvr.pathSvr = pb.genFile(fileSvr.uid,fileSvr);
 		fileSvr.perSvr 			= fileExist.perSvr;
 		fileSvr.lenSvr 			= fileExist.lenSvr;
 		fileSvr.complete		= fileExist.complete;
-		fileSvr.idSvr 			= db.Add(fileSvr);
+		db.Add(fileSvr);
 	}//此文件不存在
 	else
 	{
-		fileSvr.idSvr = db.Add(fileSvr);
+		db.Add(fileSvr);
 		
 		FileResumerPart fr = new FileResumerPart();
 		fr.CreateFile(fileSvr.pathSvr);		

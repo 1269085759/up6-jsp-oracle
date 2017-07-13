@@ -652,7 +652,7 @@ public class DBFile {
 	 * @param uid
 	 * @param fid
 	 */
-	static public void fd_complete(String fid, String fd_id, String uid)
+	static public void fd_complete(String fid, String uid)
 	{
 		String sql = "begin ";
 		sql += "update up6_files set f_perSvr='100%' ,f_complete=1 where f_idSvr=?;";
@@ -662,8 +662,8 @@ public class DBFile {
 		DbHelper db = new DbHelper();
 		PreparedStatement cmd = db.GetCommand(sql);
 		try {
-			cmd.setInt(1, Integer.parseInt(fid));
-			cmd.setInt(2, Integer.parseInt(fd_id));
+			cmd.setString(1, fid);
+			cmd.setString(2, fid);
 			cmd.setInt(3, Integer.parseInt(uid));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

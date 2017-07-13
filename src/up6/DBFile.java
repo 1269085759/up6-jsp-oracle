@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import up6.model.FileInf;
 import up6.model.FolderInf;
-import up6.model.xdb_files;
 import net.sf.json.JSONArray;
 import com.google.gson.Gson;
 
@@ -61,20 +60,20 @@ public class DBFile {
             while (r.next())
             {
                 FileInf fi 		= new FileInf();
-                fi.idSvr 		= r.getInt(1);
+                fi.id	 		= r.getString(1);
                 fi.nameLoc 		= r.getString(2);
                 fi.pathLoc 		= r.getString(3);
                 fi.lenLoc 		= r.getLong(4);
                 fi.sizeLoc 		= r.getString(5);
                 fi.md5 			= r.getString(6);
-                fi.pidRoot 		= r.getInt(7);
-                fi.pidSvr 		= r.getInt(8);
+                fi.pidRoot 		= r.getString(7);
+                fi.pid 			= r.getString(8);
                 fi.lenSvr 		= r.getLong(9);
                 fi.pathSvr 		= r.getString(10);//fix:服务器会重复创建文件项的问题
                 fi.pathRel 		= r.getString(11) + "\\";//相对路径：root\\child\\folder\\
                 files.add(fi);
                 //添加到列表
-                ids.add( Integer.toString(fi.idSvr) );
+                //ids.add( Integer.toString(fi.idSvr) );
             }
             r.close();            
             cmd.close();
@@ -102,7 +101,7 @@ public class DBFile {
 		sb.append(" from up6_files ");//change(2015-03-18):联合查询文件夹数据
 		sb.append(" where f_uid=? and f_deleted=0 and f_fdChild=0 and f_complete=0");//fix(2015-03-18):只加载未完成列表
 
-		ArrayList<xdb_files> files = new ArrayList<xdb_files>();
+		ArrayList<FileInf> files = new ArrayList<FileInf>();
 		DbHelper db = new DbHelper();
 		PreparedStatement cmd = db.GetCommand(sb.toString());
 		try {
@@ -110,7 +109,7 @@ public class DBFile {
 			ResultSet r = db.ExecuteDataSet(cmd);
 			while(r.next())
 			{
-				xdb_files f 	= new xdb_files();
+				FileInf f 	= new FileInf();
 				f.uid			= uid;
 				f.id 			= r.getString(1);
 				f.fdTask 		= r.getBoolean(2);				
@@ -162,7 +161,7 @@ public class DBFile {
         //sb.append(" on f_fdID = fd_id");
         sb.append(" where f_deleted=0 and f_fdChild=0 and f_complete=1");
 
-        ArrayList<xdb_files> files = new ArrayList<xdb_files>();
+        ArrayList<FileInf> files = new ArrayList<FileInf>();
         DbHelper db = new DbHelper();
         PreparedStatement cmd = db.GetCommand(sb.toString());
         try
@@ -170,7 +169,7 @@ public class DBFile {
         	ResultSet r = db.ExecuteDataSet(cmd);
             while (r.next())
             {
-                xdb_files f = new xdb_files();
+                FileInf f = new FileInf();
                 f.id 		= r.getString(1);
                 f.fdTask 	= r.getBoolean(2);                
                 f.nameLoc 	= r.getString(3);
@@ -196,7 +195,7 @@ public class DBFile {
 	 * @param inf
 	 * @return
 	 */
-	public boolean GetFileInfByFid(String fid,xdb_files inf)
+	public boolean GetFileInfByFid(String fid,FileInf inf)
 	{
 		boolean ret = false;
 		StringBuilder sb = new StringBuilder();
@@ -259,7 +258,7 @@ public class DBFile {
 	/// <param name="md5"></param>
 	/// <param name="inf"></param>
 	/// <returns></returns>
-	public boolean exist_file(String md5, xdb_files fileSvr)
+	public boolean exist_file(String md5, FileInf fileSvr)
 	{
 		boolean ret = false;
 		StringBuilder sb = new StringBuilder();
@@ -327,188 +326,76 @@ public class DBFile {
 	/// 文件名称，本地路径，远程路径，相对路径都使用原始字符串。
 	/// d:\soft\QQ2012.exe
 	/// </summary>
-	public int Add(xdb_files model)
+	public void Add(FileInf model)
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("insert into up6_files(");
-		sb.append(" f_idSvr");
-		sb.append(",f_sizeLoc");
-		sb.append(",f_pos");
-		sb.append(",f_lenSvr");
-		sb.append(",f_perSvr");
-		sb.append(",f_complete");
-		sb.append(",f_deleted");
+		sb.append(" f_id");
+		sb.append(",f_pid");
+		sb.append(",f_pidRoot");
+		sb.append(",f_fdTask");
 		sb.append(",f_fdChild");
 		sb.append(",f_uid");
+		sb.append(",f_pos");
+		sb.append(",f_md5");
+		sb.append(",f_lenLoc");
+		sb.append(",f_lenSvr");
+		sb.append(",f_perSvr");
+		sb.append(",f_sizeLoc");
 		sb.append(",f_nameLoc");
 		sb.append(",f_nameSvr");
 		sb.append(",f_pathLoc");
 		sb.append(",f_pathSvr");
 		sb.append(",f_pathRel");
-		sb.append(",f_md5");
-		sb.append(",f_lenLoc");
+		sb.append(",f_complete");
 		
 		sb.append(") values (");
 		
-		sb.append("SEQ_f_idSvr.NEXTVAL");
-		sb.append(",?");//sb.append("@f_sizeLoc");
-		sb.append(",?");//sb.append(",@f_pos");
-		sb.append(",?");//sb.append(",@f_lenSvr");
-		sb.append(",?");//sb.append(",@f_perSvr");
-		sb.append(",?");//sb.append(",@f_complete");
-		sb.append(",?");//sb.append(",@f_deleted");
-		sb.append(",?");//sb.append(",@f_fdChild");
-		sb.append(",?");//sb.append(",@f_uid");
-		sb.append(",?");//sb.append(",@f_nameLoc");
-		sb.append(",?");//sb.append(",@f_nameSvr");
-		sb.append(",?");//sb.append(",@f_pathLoc");
-		sb.append(",?");//sb.append(",@f_pathSvr");
-		sb.append(",?");//sb.append(",@f_pathRel");
-		sb.append(",?");//sb.append(",@f_md5");
-		sb.append(",?");//sb.append(",@f_lenLoc");
+		sb.append(" ?");//id
+		sb.append(",?");//pid
+		sb.append(",?");//pidRoot
+		sb.append(",?");//fdTask
+		sb.append(",?");//fdChild
+		sb.append(",?");//uid
+		sb.append(",?");//pos
+		sb.append(",?");//md5
+		sb.append(",?");//lenLoc		
+		sb.append(",?");//lenSvr
+		sb.append(",?");//perSvr
+		sb.append(",?");//sizeLoc
+		sb.append(",?");//nameLoc
+		sb.append(",?");//nameSvr
+		sb.append(",?");//pathLoc
+		sb.append(",?");//pathSvr
+		sb.append(",?");//pathRel
+		sb.append(",?");//complete
 		sb.append(") ");
 
 		DbHelper db = new DbHelper();
-		PreparedStatement cmd = db.GetCommand(sb.toString(),"f_idSvr");
+		PreparedStatement cmd = db.GetCommand(sb.toString());
 		
 		try {
-			cmd.setString(1, model.sizeLoc);
-			cmd.setLong(2, model.offset);
-			cmd.setLong(3, model.lenSvr);
-			cmd.setString(4, model.perSvr);
-			cmd.setBoolean(5, model.complete);
-			//cmd.setDate(6, (java.sql.Date) model.PostedTime);
-			cmd.setBoolean(6, false);
-			cmd.setBoolean(7, model.fdChild);
-			cmd.setInt(8, model.uid);
-			cmd.setString(9, model.nameLoc);
-			cmd.setString(10, model.nameSvr);
-			cmd.setString(11, model.pathLoc);
-			cmd.setString(12, model.pathSvr);
-			cmd.setString(13, model.pathRel);
-			cmd.setString(14, model.md5);
-			cmd.setLong(15, model.lenLoc);
+			cmd.setString(1, model.id);
+			cmd.setString(2, model.pid);
+			cmd.setString(3, model.pidRoot);
+			cmd.setBoolean(4, model.fdTask);
+			cmd.setBoolean(5, model.fdChild);
+			cmd.setInt(6, model.uid);
+			cmd.setLong(7, model.offset);
+			cmd.setString(8, model.md5);
+			cmd.setLong(9, model.lenLoc);
+			cmd.setLong(10, model.lenSvr);
+			cmd.setString(11, model.perSvr);
+			cmd.setString(12, model.sizeLoc);
+			cmd.setString(12, model.nameLoc);
+			cmd.setString(13, model.nameSvr);			
+			cmd.setString(14, model.pathLoc);
+			cmd.setString(15, model.pathSvr);
+			cmd.setString(16, model.pathRel);
+			cmd.setBoolean(17, model.complete);
 		} catch (SQLException e) {e.printStackTrace();}
 
-		int fid = (int)db.ExecuteGenKey(cmd);
-
-		return fid;
-	}
-
-	/// <summary>
-	/// 添加一个文件夹上传任务
-	/// </summary>
-	/// <param name="inf"></param>
-	/// <returns></returns>
-	static public int Add(FolderInf inf)
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append("insert into up6_files(");
-		sb.append("f_idSvr");
-		sb.append(",f_nameLoc");
-		sb.append(",f_fdTask");
-		sb.append(",f_fdID");
-		sb.append(",f_lenLoc");
-		sb.append(",f_sizeLoc");
-		sb.append(",f_pathLoc");
-		sb.append(") values(");
-		
-		sb.append("SEQ_f_idSvr.NEXTVAL");
-		sb.append(",?");
-		sb.append(",1");
-		sb.append(",?");//fdID
-		sb.append(",?");//lenLoc
-		sb.append(",?");//sizeLoc
-		sb.append(",?");//pathLoc
-		sb.append(")");
-
-		DbHelper db = new DbHelper();
-		PreparedStatement cmd = db.GetCommand(sb.toString(),"f_idSvr");
-		try 
-		{
-			cmd.setString(1, inf.nameLoc);
-			cmd.setInt(2, inf.idSvr);
-			cmd.setLong(3, inf.lenLoc);
-			cmd.setString(4, inf.size);
-			cmd.setString(5, inf.pathLoc);
-		} 
-		catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		int id = (int)db.ExecuteGenKey(cmd);
-		return id;
-	}
-
-	/// <summary>
-	/// 添加一条文件信息，一船提供给fd_create使用。
-	/// </summary>
-	/// <param name="inf"></param>
-	/// <returns></returns>
-	static public int Add(FileInf inf)
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append("insert into up6_files(");
-		sb.append(" f_idSvr");//1
-		sb.append(",f_pid");//2
-		sb.append(",f_pidRoot");//3
-		sb.append(",f_fdChild");//4
-		sb.append(",f_uid");//5
-		sb.append(",f_nameLoc");//6
-		sb.append(",f_nameSvr");//7
-		sb.append(",f_pathLoc");//8
-		sb.append(",f_pathSvr");//9
-		sb.append(",f_md5");//10
-		sb.append(",f_lenLoc");//11
-		sb.append(",f_lenSvr");//12
-		sb.append(",f_perSvr");//13
-		sb.append(",f_sizeLoc");//14
-		sb.append(",f_complete");//15
-		
-		sb.append(") values(");
-		
-		sb.append("SEQ_f_idSvr.NEXTVAL");
-		sb.append(",?");//sb.append("@f_pid");
-		sb.append(",?");//sb.append(",@f_pidRoot");
-		sb.append(",?");//sb.append(",@f_fdChild");
-		sb.append(",?");//sb.append(",@f_uid");
-		sb.append(",?");//sb.append(",@f_nameLoc");
-		sb.append(",?");//sb.append(",@f_nameSvr");
-		sb.append(",?");//sb.append(",@f_pathLoc");
-		sb.append(",?");//sb.append(",@f_pathSvr");
-		sb.append(",?");//sb.append(",@f_md5");
-		sb.append(",?");//sb.append(",@f_lenLoc");
-		sb.append(",?");//sb.append(",@f_lenSvr");
-		sb.append(",?");//sb.append(",@f_perSvr");
-		sb.append(",?");//sb.append(",@f_sizeLoc");
-		sb.append(",?");//sb.append(",@f_complete");
-		sb.append(")");
-
-		DbHelper db = new DbHelper();
-		PreparedStatement cmd = db.GetCommand(sb.toString(),"f_idSvr");
-		try {
-			cmd.setInt(1, inf.pidSvr);
-			cmd.setInt(2, inf.pidRoot);
-			cmd.setBoolean(3, true);
-			cmd.setInt(4, inf.uid);
-			cmd.setString(5, inf.nameLoc);
-			cmd.setString(6, inf.nameSvr);
-			cmd.setString(7, inf.pathLoc);
-			cmd.setString(8, inf.pathSvr);
-			cmd.setString(9, inf.md5);
-			cmd.setLong(10, inf.lenLoc);
-			cmd.setLong(11, inf.lenSvr);
-			cmd.setString(12, inf.perSvr);
-			cmd.setString(13, inf.sizeLoc);
-			cmd.setBoolean(14, inf.complete);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		int fid = (int)db.ExecuteGenKey(cmd);		
-		
-		return fid;
+		db.ExecuteNonQuery(cmd);
 	}
 
 	/// <summary>
@@ -531,7 +418,7 @@ public class DBFile {
 		try {
 			cmd.setString(1, inf.pathSvr);
 			cmd.setString(1, inf.md5);
-			cmd.setInt(3, inf.idSvr);
+			cmd.setString(3, inf.id);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -543,7 +430,7 @@ public class DBFile {
     /// 根据文件idSvr信息，更新文件数据表中对应项的MD5。
     /// </summary>
     /// <param name="inf"></param>
-    public void UpdateMD5(xdb_files inf)
+    public void UpdateMD5(FileInf inf)
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("update up6_files set ");
@@ -567,7 +454,7 @@ public class DBFile {
     /// 根据文件idSvr信息，更新文件数据表中对应项的MD5。
     /// </summary>
     /// <param name="inf"></param>
-    public void UpdateMD5_path(xdb_files inf)
+    public void UpdateMD5_path(FileInf inf)
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("update up6_files set ");
@@ -592,7 +479,7 @@ public class DBFile {
     /**
      * 更新文件MD5，服务器存储路径。
      */
-    public void updateInf(xdb_files inf)
+    public void updateInf(FileInf inf)
     {
 		StringBuilder sb = new StringBuilder();
 		sb.append("update up6_files set ");
@@ -821,9 +708,9 @@ public class DBFile {
 				fi.pathLoc = fi.pathLoc.replace("+", "%20");
 				fi.lenLoc  = r.getLong(2);
 				fi.sizeLoc = r.getString(3);
-				fi.md5 = db.GetStringSafe(r.getString(4),"");			
-				fi.pidRoot = r.getInt(5);
-				fi.pidSvr = r.getInt(6);
+				fi.md5 	   = db.GetStringSafe(r.getString(4),"");			
+				fi.pidRoot = r.getString(5);
+				fi.pid 	   = r.getString(6);
 				arrFiles.add( fi );
 			}
 			r.close();
@@ -862,17 +749,17 @@ public class DBFile {
 			ResultSet r = db.ExecuteDataSet(cmd);
 			while (r.next())
 			{
-				FileInf fi = new FileInf();
-	            fi.idSvr = r.getInt(1);
-				fi.nameLoc = r.getString(2);
-				fi.pathLoc = r.getString(3);
-				fi.lenLoc = r.getLong(4);
-				fi.sizeLoc = r.getString(5);
-				fi.md5 = db.GetStringSafe(r.getString(6),"");
-				fi.pidRoot = r.getInt(7);
-				fi.pidSvr = r.getInt(8);
-	            fi.lenSvr = r.getLong(9);
-	            fi.pathSvr = r.getString(10);//fix(2015-03-18):修复续传文件时服务器会创建重复文件信息的问题。
+				FileInf fi 	= new FileInf();
+	            fi.id 		= r.getString(1);
+				fi.nameLoc 	= r.getString(2);
+				fi.pathLoc 	= r.getString(3);
+				fi.lenLoc 	= r.getLong(4);
+				fi.sizeLoc 	= r.getString(5);
+				fi.md5 		= db.GetStringSafe(r.getString(6),"");
+				fi.pidRoot 	= r.getString(7);
+				fi.pid 		= r.getString(8);
+	            fi.lenSvr 	= r.getLong(9);
+	            fi.pathSvr 	= r.getString(10);//fix(2015-03-18):修复续传文件时服务器会创建重复文件信息的问题。
 				files.add(fi);
 			}
 			r.close();

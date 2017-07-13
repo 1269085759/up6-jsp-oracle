@@ -24,7 +24,7 @@ import up6.PathTool;
 import up6.XDebug;
 import up6.biz.PathBuilder;
 import up6.biz.PathMd5Builder;
-import up6.model.xdb_files;
+import up6.model.FileInf;
 
 /**
  * 以MD5模式保存文件夹，会判断重复文件，所有文件以MD5模式命名。
@@ -46,7 +46,7 @@ public class fd_appender
 	protected PathBuilder pb;
 	protected Map<Integer,Integer> map_pids;
 	protected Map<Integer,Integer> map_fd_ids;
-	Map<String,xdb_files> svr_files;
+	Map<String,FileInf> svr_files;
 	public fd_root m_root;
 	private List<String> m_md5s;
 	
@@ -57,7 +57,7 @@ public class fd_appender
 		this.pb = new PathMd5Builder();
 		this.map_pids = new HashMap<Integer,Integer>();
 		this.map_fd_ids = new HashMap<Integer,Integer>();
-		this.svr_files = new HashMap<String,xdb_files>();
+		this.svr_files = new HashMap<String,FileInf>();
 		this.m_md5s = new ArrayList<String>();
 	}
 	
@@ -74,11 +74,11 @@ public class fd_appender
         this.check_files();
         this.save_file(this.m_root);
         this.save_folder(this.m_root);
-        for(xdb_files f : this.m_root.files)
+        for(FileInf f : this.m_root.files)
         {
         	this.save_file(f);
         }
-        for(xdb_files fd : this.m_root.folders)
+        for(FileInf fd : this.m_root.folders)
         {
         	this.save_file(fd);
         }
@@ -87,7 +87,7 @@ public class fd_appender
         this.con.close();//关闭连接        
 	}
 	
-	void save_file(xdb_files f)
+	void save_file(FileInf f)
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("insert into up6_files (");
@@ -177,7 +177,7 @@ public class fd_appender
 		}//
 	}
 	
-	void save_folder(xdb_files f)
+	void save_folder(FileInf f)
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("insert into up6_files (");
@@ -228,7 +228,7 @@ public class fd_appender
         
         for(int i=0,l=this.m_root.files.size();i<l;++i)
         {        
-        	xdb_files f = this.m_root.files.get(i);
+        	FileInf f = this.m_root.files.get(i);
             if( !md5s.containsKey(f.md5) && !StringUtils.isEmpty(f.md5))
             {
                 md5s.put(f.md5, true);
@@ -255,7 +255,7 @@ public class fd_appender
 			ResultSet rs = (ResultSet)cmd.getObject(2);
 	        while(rs.next())
 	        {
-	            xdb_files f = new xdb_files();
+	            FileInf f = new FileInf();
 	            f.id 		= rs.getString("f_id");
 	            f.nameLoc = rs.getString("f_nameLoc");
 	            f.nameSvr = rs.getString("f_nameSvr");
@@ -290,10 +290,10 @@ public class fd_appender
         if (this.svr_files.size() < 1) return;
         for(int i = 0 , l = this.m_root.files.size();i<l;++i)
         {
-        	xdb_files f = this.m_root.files.get(i);
+        	FileInf f = this.m_root.files.get(i);
         	if(this.svr_files.containsKey(f.md5))
         	{
-            	xdb_files f_svr = this.svr_files.get(f.md5);
+            	FileInf f_svr = this.svr_files.get(f.md5);
             	this.m_root.lenSvr += f_svr.lenSvr;
                 f.nameSvr = f_svr.nameSvr;
                 f.pathSvr = f_svr.pathSvr;

@@ -6,7 +6,8 @@
 	page import="up6.biz.*" %><%@	
 	page import="org.apache.commons.lang.StringUtils" %><%@
 	page import="java.net.URLDecoder" %><%@
-	page import="java.net.URLEncoder" %><%/*
+	page import="java.net.URLEncoder" %><%
+/*
 	所有单个文件均以md5模式存储。
 	更新记录：
 		2012-05-24 完善
@@ -34,7 +35,7 @@ if (	StringUtils.isBlank(md5)
 	return;
 }
 
-xdb_files fileSvr= new xdb_files();
+FileInf fileSvr= new FileInf();
 fileSvr.uid = Integer.parseInt(uid);
 fileSvr.nameLoc = PathTool.getName(pathLoc);
 fileSvr.pathLoc = pathLoc;
@@ -49,7 +50,7 @@ PathMd5Builder pb = new PathMd5Builder();
 fileSvr.pathSvr = pb.genFile(fileSvr.uid,fileSvr);
 
 	DBFile db = new DBFile();
-	xdb_files fileExist = new xdb_files();
+	FileInf fileExist = new FileInf();
 	
 	boolean exist = db.exist_file(md5,fileExist);
 	//数据库已存在相同文件，且有上传进度，则直接使用此信息
@@ -74,4 +75,5 @@ String json = obj.toString();
 json = URLEncoder.encode(json,"UTF-8");//编码，防止中文乱码
 json = json.replace("+","%20");
 json = callback + "({\"value\":\"" + json + "\"})";//返回jsonp格式数据。
-out.write(json);%>
+out.write(json);
+%>

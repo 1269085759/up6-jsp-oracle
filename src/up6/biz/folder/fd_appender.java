@@ -75,7 +75,7 @@ public class fd_appender
         for(FileInf fd : this.m_root.folders)
         {
         	fd.pathSvr = PathTool.combine(this.m_root.pathSvr, fd.pathRel);
-        	this.save_file(fd);
+        	this.save_folder(fd);
         }
 
         this.cmd_add_f.close();

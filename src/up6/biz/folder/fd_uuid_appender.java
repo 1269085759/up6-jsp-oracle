@@ -35,13 +35,15 @@ public class fd_uuid_appender extends fd_appender
         for(FileInf fd : this.m_root.folders)
         {
         	fd.pathSvr = PathTool.combine(this.m_root.pathSvr, fd.pathRel);
+        	fd.pathSvr.replace("\\", "/");
         	PathTool.createDirectory(fd.pathSvr);
-        	this.save_file(fd);
+        	this.save_folder( fd);
         }
         //创建文件
         for(FileInf f : this.m_root.files)
         {
         	f.pathSvr = PathTool.combine(this.m_root.pathSvr, f.pathRel);
+        	f.pathSvr.replace("\\", "/");
     		FileResumerPart fr = new FileResumerPart();
     		fr.CreateFile(f.pathSvr);		
         	this.save_file(f);

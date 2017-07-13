@@ -1,6 +1,6 @@
 <%@ page language="java" import="up6.*" pageEncoding="UTF-8"%><%@
 	page contentType="text/html;charset=UTF-8"%><%@	
-	page import="net.sf.json.*" %><%@
+	page import="com.google.gson.Gson" %><%@
 	page import="up6.*" %><%@
 	page import="up6.model.*" %><%@
 	page import="up6.biz.*" %><%@	
@@ -23,8 +23,7 @@ String lenLoc 	= request.getParameter("lenLoc");//数字化的文件大小。120
 String sizeLoc 	= request.getParameter("sizeLoc");//格式化的文件大小。10MB
 String callback = request.getParameter("callback");
 String pathLoc	= request.getParameter("pathLoc");
-pathLoc			= pathLoc.replace("+","%20");
-pathLoc			= URLDecoder.decode(pathLoc,"UTF-8");//utf-8解码
+pathLoc			= PathTool.url_decode(pathLoc);
 
 //参数为空
 if (	StringUtils.isBlank(md5)
@@ -70,8 +69,9 @@ fileSvr.pathSvr = pb.genFile(fileSvr.uid,fileSvr);
 		fr.CreateFile(fileSvr.pathSvr);		
 	}
 
-JSONObject obj = JSONObject.fromObject(fileSvr);
-String json = obj.toString();
+Gson gson = new Gson();
+String json = gson.toJson(fileSvr);
+
 json = URLEncoder.encode(json,"UTF-8");//编码，防止中文乱码
 json = json.replace("+","%20");
 json = callback + "({\"value\":\"" + json + "\"})";//返回jsonp格式数据。

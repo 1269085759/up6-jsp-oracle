@@ -18,6 +18,7 @@ import oracle.sql.ArrayDescriptor;
 import org.apache.commons.lang.StringUtils;
 
 import up6.DbHelper;
+import up6.PathTool;
 import up6.biz.PathBuilder;
 import up6.biz.PathMd5Builder;
 import up6.model.FileInf;
@@ -68,10 +69,12 @@ public class fd_appender
         this.save_folder(this.m_root);
         for(FileInf f : this.m_root.files)
         {
+        	f.pathSvr = PathTool.combine(this.m_root.pathSvr, f.pathRel);
         	this.save_file(f);
         }
         for(FileInf fd : this.m_root.folders)
         {
+        	fd.pathSvr = PathTool.combine(this.m_root.pathSvr, fd.pathRel);
         	this.save_file(fd);
         }
 

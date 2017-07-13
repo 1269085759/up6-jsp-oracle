@@ -16,12 +16,12 @@
 		2016-04-09 完善逻辑。
 */
 
-String md5 			= request.getParameter("md5");
-String uid 			= request.getParameter("uid");
-String lenLoc 		= request.getParameter("lenLoc");//数字化的文件大小。12021
-String sizeLoc 		= request.getParameter("sizeLoc");//格式化的文件大小。10MB
-String callback     = request.getParameter("callback");
-String pathLoc		= request.getParameter("pathLoc");
+String md5 		= request.getParameter("md5");
+String uid 		= request.getParameter("uid");
+String lenLoc 	= request.getParameter("lenLoc");//数字化的文件大小。12021
+String sizeLoc 	= request.getParameter("sizeLoc");//格式化的文件大小。10MB
+String callback = request.getParameter("callback");
+String pathLoc	= request.getParameter("pathLoc");
 pathLoc			= pathLoc.replace("+","%20");
 pathLoc			= URLDecoder.decode(pathLoc,"UTF-8");//utf-8解码
 

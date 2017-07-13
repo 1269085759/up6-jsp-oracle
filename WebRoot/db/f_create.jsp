@@ -14,8 +14,10 @@
 		2015-07-30 取消文件夹层级结构存储规则，改为使用日期存储规则，文件夹层级结构仅保存在数据库中。
 		2016-01-07 返回值改为JSON
 		2016-04-09 完善逻辑。
+		2017-07-13 取消生成id操作
 */
 
+String id		= request.getParameter("id");
 String md5 		= request.getParameter("md5");
 String uid 		= request.getParameter("uid");
 String lenLoc 	= request.getParameter("lenLoc");//数字化的文件大小。12021
@@ -34,6 +36,7 @@ if (	StringUtils.isBlank(md5)
 }
 
 FileInf fileSvr= new FileInf();
+fileSvr.id = id;
 fileSvr.uid = Integer.parseInt(uid);
 fileSvr.nameLoc = PathTool.getName(pathLoc);
 fileSvr.pathLoc = pathLoc;

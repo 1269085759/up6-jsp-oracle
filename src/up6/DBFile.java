@@ -387,12 +387,12 @@ public class DBFile {
 			cmd.setLong(10, model.lenSvr);
 			cmd.setString(11, model.perSvr);
 			cmd.setString(12, model.sizeLoc);
-			cmd.setString(12, model.nameLoc);
-			cmd.setString(13, model.nameSvr);			
-			cmd.setString(14, model.pathLoc);
-			cmd.setString(15, model.pathSvr);
-			cmd.setString(16, model.pathRel);
-			cmd.setBoolean(17, model.complete);
+			cmd.setString(13, model.nameLoc);
+			cmd.setString(14, model.nameSvr);			
+			cmd.setString(15, model.pathLoc);
+			cmd.setString(16, model.pathSvr);
+			cmd.setString(17, model.pathRel);
+			cmd.setBoolean(18, model.complete);
 		} catch (SQLException e) {e.printStackTrace();}
 
 		db.ExecuteNonQuery(cmd);

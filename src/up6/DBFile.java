@@ -87,9 +87,8 @@ public class DBFile {
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("select ");
-		sb.append(" f_idSvr");
+		sb.append(" f_id");
 		sb.append(",f_fdTask");
-		sb.append(",f_fdID");
 		sb.append(",f_nameLoc");
 		sb.append(",f_pathLoc");
 		sb.append(",f_md5");
@@ -100,10 +99,7 @@ public class DBFile {
 		sb.append(",f_perSvr");
 		sb.append(",f_complete");
 		sb.append(",f_pathSvr");//fix(2015-03-16):修复无法续传文件的问题。
-		//文件夹信息
-		sb.append(",fd_files");
-		sb.append(",fd_filesComplete");
-		sb.append(" from up6_files left join up6_folders on up6_files.f_fdID = up6_folders.fd_id");//change(2015-03-18):联合查询文件夹数据
+		sb.append(" from up6_files ");//change(2015-03-18):联合查询文件夹数据
 		sb.append(" where f_uid=? and f_deleted=0 and f_fdChild=0 and f_complete=0");//fix(2015-03-18):只加载未完成列表
 
 		ArrayList<xdb_files> files = new ArrayList<xdb_files>();
@@ -116,21 +112,18 @@ public class DBFile {
 			{
 				xdb_files f 	= new xdb_files();
 				f.uid			= uid;
-				f.idSvr 		= r.getInt(1);
-				f.f_fdTask 		= r.getBoolean(2);
-				f.f_fdID 		= r.getInt(3);
-				f.nameLoc 		= r.getString(4);
-				f.pathLoc 		= r.getString(5);
-				f.md5 			= r.getString(6);
-				f.lenLoc 		= r.getLong(7);
-				f.sizeLoc 		= r.getString(8);
-				f.FilePos 		= r.getLong(9);
-				f.lenSvr 		= r.getLong(10);
-				f.perSvr 		= r.getString(11);
-				f.complete 		= r.getBoolean(12);
-				f.pathSvr		= r.getString(13);//fix(2015-03-19):修复无法续传文件的问题。
-				f.filesCount 	= r.getInt(14);//add(2015-03-18):
-				f.filesComplete = r.getInt(15);//add(2015-03-18):
+				f.id 			= r.getString(1);
+				f.fdTask 		= r.getBoolean(2);				
+				f.nameLoc 		= r.getString(3);
+				f.pathLoc 		= r.getString(4);
+				f.md5 			= r.getString(5);
+				f.lenLoc 		= r.getLong(6);
+				f.sizeLoc 		= r.getString(7);
+				f.offset 		= r.getLong(8);
+				f.lenSvr 		= r.getLong(9);
+				f.perSvr 		= r.getString(10);
+				f.complete 		= r.getBoolean(11);
+				f.pathSvr		= r.getString(12);//fix(2015-03-19):修复无法续传文件的问题。
 
 				files.add(f);
 				
@@ -143,35 +136,8 @@ public class DBFile {
 			e.printStackTrace();
 		}
 		if(files.size() < 1) return null;
-
-
-		ArrayList<xdb_files> arrFiles = new ArrayList<xdb_files>();
-		for(xdb_files f : files)
-		{
-			//是文件夹任务=>取文件夹JSON
-			if (f.f_fdTask)
-			{
-				FolderInf fd = new FolderInf();
-				f.fd_json = DBFolder.GetFilesUnComplete(f.f_fdID,fd);
-                float pdPer = 0;
-                long lenPosted = DBFolder.GetLenPosted(f.f_fdID);
-                fd.lenSvr = lenPosted;
-                f.lenSvr = lenPosted;//给客户端使用。
-                fd.filesCount = f.filesCount;//add(2015-03-18):
-                fd.filesComplete = f.filesComplete;//add(2015-03-18)
-                long len = fd.lenLoc;
-                if (lenPosted > 0 && len > 0)
-                {
-                    pdPer = (float)Math.round(((lenPosted*1.0f) / len*1.0f) * 100.0f);
-                }
-                f.idSvr = f.f_fdID;//将文件ID改为文件夹的ID，客户端续传文件夹时将会使用这个ID。
-				f.perSvr = Float.toString( pdPer ) + "%";
-                f.sizeLoc = fd.size;
-			}
-			arrFiles.add( f );
-		}
 		Gson g = new Gson();
-	    return g.toJson( arrFiles );//bug:arrFiles为空时，此行代码有异常	
+	    return g.toJson( files );//bug:arrFiles为空时，此行代码有异常	
 	}
 	
 	/**
@@ -183,9 +149,8 @@ public class DBFile {
 	{
         StringBuilder sb = new StringBuilder();
         sb.append("select ");
-        sb.append(" f_idSvr");
+        sb.append(" f_id");
         sb.append(",f_fdTask");
-        sb.append(",f_fdID");
         sb.append(",f_nameLoc");
         sb.append(",f_pathLoc");
         sb.append(",f_lenLoc");
@@ -206,14 +171,13 @@ public class DBFile {
             while (r.next())
             {
                 xdb_files f = new xdb_files();
-                f.idSvr 	= r.getInt(1);
-                f.f_fdTask 	= r.getBoolean(2);
-                f.f_fdID 	= r.getInt(3);
-                f.nameLoc 	= r.getString(4);
-                f.pathLoc 	= r.getString(5);
-                f.lenLoc 	= r.getLong(6);
-                f.sizeLoc 	= r.getString(7);//fix(2015-07-30):修复没有正确获取文件夹大小
-                f.perSvr 	= r.getString(8);//已下载百分比
+                f.id 		= r.getString(1);
+                f.fdTask 	= r.getBoolean(2);                
+                f.nameLoc 	= r.getString(3);
+                f.pathLoc 	= r.getString(4);
+                f.lenLoc 	= r.getLong(5);
+                f.sizeLoc 	= r.getString(6);//fix(2015-07-30):修复没有正确获取文件夹大小
+                f.perSvr 	= r.getString(7);//已下载百分比
 
                 files.add(f);
 
@@ -232,12 +196,12 @@ public class DBFile {
 	 * @param inf
 	 * @return
 	 */
-	public boolean GetFileInfByFid(int fid,xdb_files inf)
+	public boolean GetFileInfByFid(String fid,xdb_files inf)
 	{
 		boolean ret = false;
 		StringBuilder sb = new StringBuilder();
 		sb.append("select ");
-		sb.append("f_uid");
+		sb.append(" f_uid");
 		sb.append(",f_nameLoc");
 		sb.append(",f_nameSvr");
 		sb.append(",f_pathLoc");
@@ -252,17 +216,17 @@ public class DBFile {
 		sb.append(",f_complete");
 		sb.append(",f_time");
 		sb.append(",f_deleted");
-		sb.append(" from up6_files where f_idSvr=? ");
+		sb.append(" from up6_files where f_id=? ");
 		
 		DbHelper db = new DbHelper();
 		PreparedStatement cmd = db.GetCommand(sb.toString());
 		try {
-			cmd.setInt(1, fid);
+			cmd.setString(1, fid);
 			ResultSet r = db.ExecuteDataSet(cmd);
 
 			if (r.next())
 			{
-				inf.idSvr 			= fid;
+				inf.id 				= fid;
 				inf.uid 			= r.getInt(1);
 				inf.nameLoc 		= r.getString(2);
 				inf.nameSvr 		= r.getString(3);
@@ -272,7 +236,7 @@ public class DBFile {
 				inf.md5 			= r.getString(7);
 				inf.lenLoc 			= r.getLong(8);
 				inf.sizeLoc 		= r.getString(9);
-	            inf.FilePos 		= r.getLong(10);
+	            inf.offset 			= r.getLong(10);
 	            inf.lenSvr 			= r.getLong(11);
 				inf.perSvr 			= r.getString(12);
 				inf.complete 		= r.getBoolean(13);
@@ -329,7 +293,7 @@ public class DBFile {
 			//ResultSet r = db.ExecuteDataSet(cmd);
 			if (r.next())
 			{
-				fileSvr.idSvr 			= r.getInt(1);
+				fileSvr.id 				= r.getString(1);
 				fileSvr.uid 			= r.getInt(2);
 				fileSvr.nameLoc 		= r.getString(3);
 				fileSvr.nameSvr 		= r.getString(4);
@@ -339,7 +303,7 @@ public class DBFile {
 				fileSvr.md5 			= r.getString(8);
 				fileSvr.lenLoc 			= r.getLong(9);
 				fileSvr.sizeLoc 		= r.getString(10);
-				fileSvr.FilePos 		= r.getLong(11);
+				fileSvr.offset 			= r.getLong(11);
 				fileSvr.lenSvr 			= r.getLong(12);
 				fileSvr.perSvr 			= r.getString(13);
 				fileSvr.complete 		= r.getBoolean(14);
@@ -409,13 +373,13 @@ public class DBFile {
 		
 		try {
 			cmd.setString(1, model.sizeLoc);
-			cmd.setLong(2, model.FilePos);
+			cmd.setLong(2, model.offset);
 			cmd.setLong(3, model.lenSvr);
 			cmd.setString(4, model.perSvr);
 			cmd.setBoolean(5, model.complete);
 			//cmd.setDate(6, (java.sql.Date) model.PostedTime);
 			cmd.setBoolean(6, false);
-			cmd.setBoolean(7, model.f_fdChild);
+			cmd.setBoolean(7, model.fdChild);
 			cmd.setInt(8, model.uid);
 			cmd.setString(9, model.nameLoc);
 			cmd.setString(10, model.nameSvr);
@@ -584,13 +548,13 @@ public class DBFile {
 		StringBuilder sb = new StringBuilder();
 		sb.append("update up6_files set ");
 		sb.append(" f_md5 = ? ");
-		sb.append(" where f_idSvr=? ");
+		sb.append(" where f_id=? ");
 
 		DbHelper db = new DbHelper();
 		PreparedStatement cmd = db.GetCommand(sb.toString());
 		try {
 			cmd.setString(1, inf.md5);
-			cmd.setInt(2, inf.idSvr);
+			cmd.setString(2, inf.id);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -609,14 +573,14 @@ public class DBFile {
 		sb.append("update up6_files set ");
 		sb.append(" f_md5 = ? ");
 		sb.append(",f_pathSvr = ? ");
-		sb.append(" where f_idSvr=? ");
+		sb.append(" where f_id=? ");
 
 		DbHelper db = new DbHelper();
 		PreparedStatement cmd = db.GetCommand(sb.toString());
 		try {
 			cmd.setString(1, inf.md5);
 			cmd.setString(2, inf.pathSvr);//fix(2015-07-30):重新更新路径
-			cmd.setInt(3, inf.idSvr);
+			cmd.setString(3, inf.id);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -637,7 +601,7 @@ public class DBFile {
 		sb.append(",f_lenSvr = ? ");//
 		sb.append(",f_perSvr = ? ");//
 		sb.append(",f_complete = ? ");//
-		sb.append(" where f_idSvr=? ");
+		sb.append(" where f_idString=? ");
 
 		DbHelper db = new DbHelper();
 		PreparedStatement cmd = db.GetCommand(sb.toString());
@@ -647,7 +611,7 @@ public class DBFile {
 			cmd.setLong(3, inf.lenSvr);
 			cmd.setString(4, inf.perSvr);
 			cmd.setBoolean(5, inf.complete);
-			cmd.setInt(6, inf.idSvr);
+			cmd.setString(6, inf.id);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

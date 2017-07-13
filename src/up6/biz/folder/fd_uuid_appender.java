@@ -42,6 +42,7 @@ public class fd_uuid_appender extends fd_appender
         //创建文件
         for(FileInf f : this.m_root.files)
         {
+        	f.nameSvr = f.nameLoc;
         	f.pathSvr = PathTool.combine(this.m_root.pathSvr, f.pathRel);
         	f.pathSvr.replace("\\", "/");
     		FileResumerPart fr = new FileResumerPart();

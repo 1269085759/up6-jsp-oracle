@@ -120,7 +120,7 @@ public class fd_appender
 		sb.append(",?");
 		sb.append(",?");
 		sb.append(",?");
-		sb.append(");");
+		sb.append(")");
 		
 		if(this.cmd_add_f == null)
 		{
@@ -166,7 +166,7 @@ public class fd_appender
 	        this.cmd_add_f.setLong(14, f.lenSvr);//f_lenSvr	        
 	        this.cmd_add_f.setString(15, f.perSvr);//f_perSvr
 	        this.cmd_add_f.setBoolean(16, f.complete);//f_complete
-	        this.cmd_add_f.execute();
+	        this.cmd_add_f.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -176,7 +176,7 @@ public class fd_appender
 	protected void save_folder(FileInf f)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("insert into up6_files (");
+		sb.append("insert into up6_folders (");
 		sb.append(" fd_id");//1
 		sb.append(",fd_pid");//2
 		sb.append(",fd_pidRoot");//3
@@ -188,7 +188,7 @@ public class fd_appender
 		sb.append(",?");
 		sb.append(",?");
 		sb.append(",?");
-		sb.append(");");
+		sb.append(")");
 		
 		if(this.cmd_add_fd == null)
 		{
@@ -211,7 +211,7 @@ public class fd_appender
 	        this.cmd_add_fd.setString(3, f.pidRoot);//pidRoot
 	        this.cmd_add_fd.setString(4, f.nameLoc);//name
 	        this.cmd_add_fd.setInt(5, f.uid);//f_uid
-	        this.cmd_add_fd.execute();
+	        this.cmd_add_fd.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -20,9 +20,7 @@ public class fd_uuid_appender extends fd_appender
 	}
 
     public void save() throws IOException, SQLException
-    {
-        this.m_root.pathRel = this.m_root.nameLoc;//
-        
+    {   
         this.m_root.pathSvr = this.pb.genFolder(this.m_root.uid, this.m_root.nameLoc);
         PathTool.createDirectory(this.m_root.pathSvr);
 
@@ -30,4 +28,5 @@ public class fd_uuid_appender extends fd_appender
     }
     protected void get_md5s(){}//不查询重复文件
     protected void get_md5_files() { }//不查询重复文件
+    protected void check_files(){}
 }

@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import oracle.jdbc.OracleCallableStatement;
 import oracle.jdbc.OracleTypes;
 import oracle.sql.ARRAY;
 import oracle.sql.ArrayDescriptor;
@@ -19,9 +18,6 @@ import oracle.sql.ArrayDescriptor;
 import org.apache.commons.lang.StringUtils;
 
 import up6.DbHelper;
-import up6.FileResumerPart;
-import up6.PathTool;
-import up6.XDebug;
 import up6.biz.PathBuilder;
 import up6.biz.PathMd5Builder;
 import up6.model.FileInf;
@@ -34,14 +30,10 @@ import up6.model.FileInf;
  */
 public class fd_appender 
 {
-	String[] fd_ids;
-	String[] f_ids;
 	DbHelper db;
 	Connection con;
 	PreparedStatement cmd_add_f = null;
-	PreparedStatement cmd_add_fd;
-	PreparedStatement cmd_update_fd;
-	PreparedStatement cmd_update_file;
+	PreparedStatement cmd_add_fd = null;
 	
 	protected PathBuilder pb;
 	protected Map<Integer,Integer> map_pids;
@@ -83,7 +75,8 @@ public class fd_appender
         	this.save_file(fd);
         }
 
-        this.cmd_update_file.close();
+        this.cmd_add_f.close();
+        this.cmd_add_fd.close();
         this.con.close();//关闭连接        
 	}
 	

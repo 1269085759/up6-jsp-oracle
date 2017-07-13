@@ -48,8 +48,7 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 
 String folderStr = request.getParameter("folder");
-folderStr = folderStr.replace("+","%20");
-folderStr = URLDecoder.decode(folderStr,"UTF-8");//utf-8解码
+folderStr = PathTool.url_decode(folderStr);
 
 //参数为空
 if ( StringUtils.isBlank(folderStr) )

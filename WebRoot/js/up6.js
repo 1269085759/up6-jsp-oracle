@@ -112,7 +112,7 @@ function HttpUploaderMgr()
 		//文件操作相关
 		, "UrlCreate"		: "http://localhost:8080/Uploader6.3Oracle/db/f_create.jsp"
 		, "UrlPost"			: "http://localhost:8080/Uploader6.3Oracle/db/f_post.jsp"
-        , "UrlProcess"		: "http://localhost:8888/db/f_process.aspx"
+        , "UrlProcess"		: "http://localhost:8080/Uploader6.3Oracle/db/f_process.jsp"
 		, "UrlComplete"		: "http://localhost:8080/Uploader6.3Oracle/db/f_complete.jsp"
 		, "UrlList"			: "http://localhost:8080/Uploader6.3Oracle/db/f_list.jsp"
 		, "UrlDel"			: "http://localhost:8080/Uploader6.3Oracle/db/f_del.jsp"

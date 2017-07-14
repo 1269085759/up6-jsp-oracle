@@ -87,7 +87,7 @@ if(dir.exists())
 				}
 				String sb = buffer.toString();
 				db.ExecuteNonQuery(sb);
-				XDebug.Output("sql",sb);
+				//XDebug.Output("sql",sb);
 				XDebug.Output("sql",file.getName());
 			}
 		}

@@ -18,4 +18,4 @@ CREATE TABLE up6_folders
 	  ,timeUpload			DATE DEFAULT sysdate  	 /*上传时间*/
 	  ,fd_pidRoot			varchar2(32) default ''		 /*根级ID*/
 	  ,fd_pathRel			varchar2(255) default ''  /*相对路径。基于顶级节点。root\\child\\self*/
-);
+)

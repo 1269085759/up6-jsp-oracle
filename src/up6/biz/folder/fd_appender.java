@@ -37,8 +37,6 @@ public class fd_appender
 	PreparedStatement cmd_add_fd = null;
 	
 	protected PathBuilder pb;
-	protected Map<Integer,Integer> map_pids;
-	protected Map<Integer,Integer> map_fd_ids;
 	Map<String,FileInf> svr_files;
 	public fd_root m_root;
 	private List<String> m_md5s;
@@ -48,8 +46,6 @@ public class fd_appender
 		this.db = new DbHelper();
 		this.con = this.db.GetCon();		
 		this.pb = new PathBuilderMd5();
-		this.map_pids = new HashMap<Integer,Integer>();
-		this.map_fd_ids = new HashMap<Integer,Integer>();
 		this.svr_files = new HashMap<String,FileInf>();
 		this.m_md5s = new ArrayList<String>();
 	}

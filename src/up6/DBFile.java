@@ -89,17 +89,18 @@ public class DBFile {
 		sb.append(" f_id");
 		sb.append(",f_fdTask");
 		sb.append(",f_nameLoc");
+		sb.append(",f_nameSvr");
 		sb.append(",f_pathLoc");
+		sb.append(",f_pathSvr");
+		sb.append(",f_pathRel");
 		sb.append(",f_md5");
 		sb.append(",f_lenLoc");
 		sb.append(",f_sizeLoc");
 		sb.append(",f_pos");
 		sb.append(",f_lenSvr");
 		sb.append(",f_perSvr");
-		sb.append(",f_complete");
-		sb.append(",f_pathSvr");//fix(2015-03-16):修复无法续传文件的问题。
-		sb.append(" from up6_files ");//change(2015-03-18):联合查询文件夹数据
-		sb.append(" where f_uid=? and f_deleted=0 and f_fdChild=0 and f_complete=0");//fix(2015-03-18):只加载未完成列表
+		sb.append(" from up6_files");
+		sb.append(" where f_uid=? and f_deleted=0 and f_complete=0 and f_pidRoot is null");
 
 		ArrayList<FileInf> files = new ArrayList<FileInf>();
 		DbHelper db = new DbHelper();
@@ -109,21 +110,21 @@ public class DBFile {
 			ResultSet r = db.ExecuteDataSet(cmd);
 			while(r.next())
 			{
-				FileInf f 	= new FileInf();
+				FileInf f 		= new FileInf();
 				f.uid			= uid;
 				f.id 			= r.getString(1);
 				f.fdTask 		= r.getBoolean(2);				
 				f.nameLoc 		= r.getString(3);
-				f.pathLoc 		= r.getString(4);
-				f.md5 			= r.getString(5);
-				f.lenLoc 		= r.getLong(6);
-				f.sizeLoc 		= r.getString(7);
-				f.offset 		= r.getLong(8);
-				f.lenSvr 		= r.getLong(9);
-				f.perSvr 		= r.getString(10);
-				f.complete 		= r.getBoolean(11);
-				f.pathSvr		= r.getString(12);//fix(2015-03-19):修复无法续传文件的问题。
-
+				f.nameSvr		= r.getString(4);
+				f.pathLoc 		= r.getString(5);
+				f.pathSvr 		= r.getString(6);
+				f.pathRel 		= r.getString(7);
+				f.md5 			= r.getString(8);
+				f.lenLoc 		= r.getLong(9);
+				f.sizeLoc 		= r.getString(10);
+				f.offset 		= r.getLong(11);
+				f.lenSvr 		= r.getLong(12);
+				f.perSvr 		= r.getString(13);
 				files.add(f);
 				
 			}
@@ -542,16 +543,19 @@ public class DBFile {
 	static public void fd_complete(String fid, String uid)
 	{
 		String sql = "begin ";
-		sql += "update up6_files set f_perSvr='100%' ,f_complete=1 where f_id=?;";
+		sql += "update up6_files set f_perSvr='100%',f_lenSvr=f_lenLoc,f_complete=1 where f_id=? and f_uid=?;";
 		sql += "update up6_folders set fd_complete=1 where fd_id=? and fd_uid=?;";
+		sql += "update up6_files set f_perSvr='100%',f_lenSvr=f_lenLoc,f_complete=1 where f_pidRoot=?;";
 		sql += "end;";
 		
 		DbHelper db = new DbHelper();
 		PreparedStatement cmd = db.GetCommand(sql);
 		try {
 			cmd.setString(1, fid);
-			cmd.setString(2, fid);
-			cmd.setInt(3, Integer.parseInt(uid));
+			cmd.setInt(2, Integer.parseInt(uid));
+			cmd.setString(3, fid);
+			cmd.setInt(4, Integer.parseInt(uid));
+			cmd.setString(5, fid);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -561,7 +565,7 @@ public class DBFile {
 	
 	public boolean fd_fileProcess(int uid, int f_id, long f_pos, long lenSvr, String perSvr, int fd_idSvr, long fd_lenSvr,String fd_perSvr,boolean complete)
     {
-    	this.f_process(uid, f_id, f_pos, lenSvr, perSvr,complete);
+    	this.f_process(uid, Integer.toString(f_id), f_pos, lenSvr, perSvr);
     	this.fd_process(uid, fd_idSvr, fd_lenSvr,fd_perSvr);
     	return true;
     }
@@ -592,21 +596,20 @@ public class DBFile {
 	///<param name="filePos">文件位置，大小可能超过2G，所以需要使用long保存</param>
 	///<param name="postedLength">已上传长度，文件大小可能超过2G，所以需要使用long保存</param>
 	///<param name="postedPercent">已上传百分比</param>
-	public boolean f_process(int uid,int f_id,long f_pos,long f_lenSvr,String f_perSvr,boolean cmp)
+	public boolean f_process(int uid,String f_id,long offset,long f_lenSvr,String f_perSvr)
 	{
-		//String sql = "update up6_files set f_pos=?,f_lenSvr=?,f_perSvr=? where f_uid=? and f_idSvr=?";
-		String sql = "call f_process(?,?,?,?,?,?)";//使用存储过程
+		String sql = "update up6_files set f_pos=?,f_lenSvr=?,f_perSvr=? where f_uid=? and f_id=?";
+		
 		DbHelper db = new DbHelper();
-		PreparedStatement cmd = db.GetCommandStored(sql);
+		PreparedStatement cmd = db.GetCommand(sql);
 		
 		try 
 		{
-			cmd.setLong(1, f_pos);
+			cmd.setLong(1, offset);
 			cmd.setLong(2, f_lenSvr);
 			cmd.setString(3, f_perSvr);
 			cmd.setInt(4, uid);
-			cmd.setInt(5, f_id);
-			cmd.setBoolean(6, cmp);
+			cmd.setString(5, f_id);
 		} catch (SQLException e) {e.printStackTrace();}
 
 		db.ExecuteNonQuery(cmd);

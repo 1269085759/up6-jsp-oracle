@@ -66,6 +66,8 @@ public class fd_appender
         for(FileInf f : this.m_root.files)
         {
         	f.pathSvr = this.pb.genFile(this.m_root.uid, f.md5, f.nameLoc);
+        	f.nameSvr = f.md5 + "." + PathTool.getExtention(f.nameLoc);
+        	f.fdChild = true;        	
         	this.save_file(f);
         }
         for(FileInf fd : this.m_root.folders)

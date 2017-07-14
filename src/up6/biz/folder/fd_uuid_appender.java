@@ -45,6 +45,7 @@ public class fd_uuid_appender extends fd_appender
         	f.nameSvr = f.nameLoc;
         	f.pathSvr = PathTool.combine(this.m_root.pathSvr, f.pathRel);
         	f.pathSvr.replace("\\", "/");
+        	f.fdChild = true;
     		FileResumerPart fr = new FileResumerPart();
     		fr.CreateFile(f.pathSvr);		
         	this.save_file(f);

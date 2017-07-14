@@ -11,5 +11,6 @@ public class fd_root extends FileInf{
     public fd_root()
     {
     	this.fdTask = true;
+    	this.fdChild = false;
     }
 }

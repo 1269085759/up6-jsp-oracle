@@ -124,9 +124,7 @@ public class FileResumerPart {
 
 			InputStream stream = rangeFile.getInputStream();			
 			byte[] data = new byte[(int)this.m_RangeSize];//128k
-			int readLen = stream.read(data);//实际读取的大小
-			stream.close();
-			XDebug.Output("实际读取的大小",readLen);
+			stream.close();			
 			
 			//bug:在部分服务器中会出现错误：(另一个程序正在使用此文件，进程无法访问。)
 			RandomAccessFile raf = new RandomAccessFile(this.m_pathSvr,"rw");
@@ -134,8 +132,7 @@ public class FileResumerPart {
 			raf.seek(this.m_RangePos);
 			raf.write(data);
 
-			raf.close();
-			XDebug.Output("文件块保存完毕",readLen);
+			raf.close();			
 			//file.delete();//删除临时文件		
 			
 		} catch (IOException e) {

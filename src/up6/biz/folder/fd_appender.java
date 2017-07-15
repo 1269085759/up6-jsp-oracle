@@ -154,7 +154,7 @@ public class fd_appender
         try {
 			this.cmd_add_f.setString(1, f.id);//id
 	        this.cmd_add_f.setString(2, f.pid);//pid
-	        this.cmd_add_f.setString(3, f.pidRoot);//pidRoot
+	        this.cmd_add_f.setString(3, this.m_root.id);//pidRoot
 	        this.cmd_add_f.setBoolean(4, f.fdTask);//fdTask
 	        this.cmd_add_f.setBoolean(5, f.fdChild);//f_fdChild
 	        this.cmd_add_f.setInt(6, f.uid);//f_uid
@@ -185,8 +185,14 @@ public class fd_appender
 		sb.append(",fd_pidRoot");//3
 		sb.append(",fd_name");//4
 		sb.append(",fd_uid");//5
+		sb.append(",fd_pathLoc");//6
+		sb.append(",fd_pathSvr");//7
+		sb.append(",fd_pathRel");//8
 		sb.append(") values(");//
 		sb.append(" ?");
+		sb.append(",?");
+		sb.append(",?");
+		sb.append(",?");
 		sb.append(",?");
 		sb.append(",?");
 		sb.append(",?");
@@ -201,7 +207,10 @@ public class fd_appender
 		        this.cmd_add_fd.setString(2, "");//
 		        this.cmd_add_fd.setString(3, "");//
 		        this.cmd_add_fd.setString(4, "");//fd_name
-		        this.cmd_add_fd.setInt(5, 0);//fd_uid	        
+		        this.cmd_add_fd.setInt(5, 0);//fd_uid	     
+		        this.cmd_add_fd.setString(6, "");//
+		        this.cmd_add_fd.setString(7, "");//
+		        this.cmd_add_fd.setString(8, "");//
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -211,9 +220,12 @@ public class fd_appender
         try {
 			this.cmd_add_fd.setString(1, f.id);//id
 	        this.cmd_add_fd.setString(2, f.pid);//pid
-	        this.cmd_add_fd.setString(3, f.pidRoot);//pidRoot
+	        this.cmd_add_fd.setString(3, this.m_root.id);//pidRoot
 	        this.cmd_add_fd.setString(4, f.nameLoc);//name
 	        this.cmd_add_fd.setInt(5, f.uid);//f_uid
+	        this.cmd_add_fd.setString(6, f.pathLoc);//pid
+	        this.cmd_add_fd.setString(7, f.pathSvr);//pid
+	        this.cmd_add_fd.setString(8, f.pathRel);//pid
 	        this.cmd_add_fd.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

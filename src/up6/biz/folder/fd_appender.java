@@ -85,24 +85,28 @@ public class fd_appender
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("insert into up6_files (");
-		sb.append(" f_id");//0
-		sb.append(",f_pid");//1
-		sb.append(",f_pidRoot");//2
-		sb.append(",f_fdTask");//3
-		sb.append(",f_fdChild");//4
-		sb.append(",f_uid");//5
-		sb.append(",f_nameLoc");//6
-		sb.append(",f_nameSvr");//7
-		sb.append(",f_pathLoc");//8
-		sb.append(",f_pathSvr");//9
-		sb.append(",f_pathRel");//10
-		sb.append(",f_md5");//10
-		sb.append(",f_lenLoc");//11
-		sb.append(",f_lenSvr");//12
-		sb.append(",f_perSvr");//13
-		sb.append(",f_complete");//14
-		sb.append(") values(");//15
+		sb.append(" f_id");//1
+		sb.append(",f_pid");//2
+		sb.append(",f_pidRoot");//3
+		sb.append(",f_fdTask");//4
+		sb.append(",f_fdChild");//5
+		sb.append(",f_uid");//6
+		sb.append(",f_nameLoc");//7
+		sb.append(",f_nameSvr");//8
+		sb.append(",f_pathLoc");//9
+		sb.append(",f_pathSvr");//10
+		sb.append(",f_pathRel");//11
+		sb.append(",f_md5");//12
+		sb.append(",f_lenLoc");//13
+		sb.append(",f_sizeLoc");//14
+		sb.append(",f_lenSvr");//15
+		sb.append(",f_perSvr");//16
+		sb.append(",f_complete");//17
+		
+		sb.append(") values(");
+		
 		sb.append(" ?");
+		sb.append(",?");
 		sb.append(",?");
 		sb.append(",?");
 		sb.append(",?");
@@ -137,9 +141,10 @@ public class fd_appender
 		        this.cmd_add_f.setString(11, "");//f_pathRel
 		        this.cmd_add_f.setString(12, "");//f_md5
 		        this.cmd_add_f.setLong(13, 0);//f_lenLoc
-		        this.cmd_add_f.setLong(14, 0);//f_lenSvr	        
-		        this.cmd_add_f.setString(15, "");//f_perSvr
-		        this.cmd_add_f.setBoolean(16, false);//f_complete	        
+		        this.cmd_add_f.setString(14, "");//f_sizeLoc
+		        this.cmd_add_f.setLong(15, 0);//f_lenSvr	        
+		        this.cmd_add_f.setString(16, "");//f_perSvr
+		        this.cmd_add_f.setBoolean(17, false);//f_complete	        
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -161,9 +166,10 @@ public class fd_appender
 	        this.cmd_add_f.setString(11, f.pathRel);//f_pathRel
 	        this.cmd_add_f.setString(12, f.md5);//f_md5
 	        this.cmd_add_f.setLong(13, f.lenLoc);//f_lenLoc
-	        this.cmd_add_f.setLong(14, f.lenSvr);//f_lenSvr	        
-	        this.cmd_add_f.setString(15, f.perSvr);//f_perSvr
-	        this.cmd_add_f.setBoolean(16, f.complete);//f_complete
+	        this.cmd_add_f.setString(14, f.sizeLoc);//f_sizeLoc
+	        this.cmd_add_f.setLong(15, f.lenSvr);//f_lenSvr	        
+	        this.cmd_add_f.setString(16, f.perSvr);//f_perSvr
+	        this.cmd_add_f.setBoolean(17, f.complete);//f_complete
 	        this.cmd_add_f.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

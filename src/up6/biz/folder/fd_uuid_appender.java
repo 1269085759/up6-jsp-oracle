@@ -25,8 +25,6 @@ public class fd_uuid_appender extends fd_appender
     {   
         this.m_root.pathSvr = this.pb.genFolder(this.m_root.uid, this.m_root.nameLoc);
         PathTool.createDirectory(this.m_root.pathSvr);
-        //对空文件夹的处理，或者0字节文件夹的处理
-        if(this.m_root.lenLoc == 0) this.m_root.complete = true;
 
         this.save_file(this.m_root);
         this.save_folder(this.m_root);

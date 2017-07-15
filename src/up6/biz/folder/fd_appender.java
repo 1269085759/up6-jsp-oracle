@@ -167,8 +167,8 @@ public class fd_appender
 	        this.cmd_add_f.setLong(13, f.lenLoc);//f_lenLoc
 	        this.cmd_add_f.setString(14, f.sizeLoc);//f_sizeLoc
 	        this.cmd_add_f.setLong(15, f.lenSvr);//f_lenSvr	        
-	        this.cmd_add_f.setString(16, f.perSvr);//f_perSvr
-	        this.cmd_add_f.setBoolean(17, f.complete);//f_complete
+	        this.cmd_add_f.setString(16, f.lenLoc > 0 ? f.perSvr : "0%");//f_perSvr
+	        this.cmd_add_f.setBoolean(17, f.lenLoc > 0 ? f.complete : true);//f_complete
 	        this.cmd_add_f.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -19,7 +19,7 @@ String sqlDir = PathTool.combine(pathParent,"sql");
 String downDir = PathTool.combine(pathParent,"sql.down");
 DbHelper db = new DbHelper();
 
-String[] clear_type = {"ARRAY_INT","ARRAY_MD5"}; 
+String[] clear_type = {"ARRAY_MD5"}; 
 for(String str : clear_type)
 {
 	String sql = "select count(*) from user_objects where object_type='TYPE' and object_name = '" + str + "'";
@@ -31,7 +31,7 @@ for(String str : clear_type)
 	}
 }
 
-String[] clear_sequence = {"SEQ_F_IDSVR","SEQ_FD_ID","SEQ_DN_F_IDSVR","SEQ_DN_FD_ID"};
+String[] clear_sequence = {"SEQ_DN_F_IDSVR","SEQ_DN_FD_ID"};
 for(String str : clear_sequence)
 {
 	String sql = "select count(*) from user_objects where object_type='SEQUENCE' and object_name = '" + str + "'";
@@ -55,7 +55,7 @@ for(String str : clear_table)
 	}
 }
 
-String[] clear_procedure = {"F_PROCESS","FD_FILES_ADD_BATCH","FD_FILES_CHECK","FD_PROCESS","FD_ADD_BATCH"};
+String[] clear_procedure = {"FD_FILES_CHECK","FD_ADD_BATCH"};
 for(String str : clear_procedure)
 {
 	String sql = "select count(*) from user_objects where object_type='PROCEDURE' and object_name = '" + str + "'";

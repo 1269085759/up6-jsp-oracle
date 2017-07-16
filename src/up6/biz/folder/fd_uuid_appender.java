@@ -3,7 +3,7 @@ package up6.biz.folder;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import up6.FileResumerPart;
+import up6.FileBlockWriter;
 import up6.PathTool;
 import up6.biz.PathBuilderUuid;
 import up6.model.FileInf;
@@ -44,7 +44,7 @@ public class fd_uuid_appender extends fd_appender
         	f.pathSvr = PathTool.combine(this.m_root.pathSvr, f.pathRel);
         	f.pathSvr.replace("\\", "/");
         	f.fdChild = true;
-    		FileResumerPart fr = new FileResumerPart();
+    		FileBlockWriter fr = new FileBlockWriter();
     		fr.CreateFile(f.pathSvr);		
         	this.save_file(f);
         }

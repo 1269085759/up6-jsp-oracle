@@ -67,7 +67,7 @@ fileSvr.pathSvr = pb.genFile(fileSvr.uid,fileSvr);
 	{
 		db.Add(fileSvr);
 		
-		FileResumerPart fr = new FileResumerPart();
+		FileBlockWriter fr = new FileBlockWriter();
 		fr.CreateFile(fileSvr.pathSvr);		
 	}
 

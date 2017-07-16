@@ -72,7 +72,7 @@ function HttpUploaderMgr()
 		//文件操作相关
 		, "UrlCreate"		: "http://localhost:8080/Uploader6.3Oracle/db/f_create.jsp"
 		, "UrlPost"			: "http://localhost:8080/Uploader6.3Oracle/db/f_post.jsp"
-        , "UrlProcess"		: "http://localhost:8080/Uploader6.3Oracle/db/f_process.aspx"
+        , "UrlProcess"		: "http://localhost:8080/Uploader6.3Oracle/db/f_process.jsp"
 		, "UrlComplete"		: "http://localhost:8080/Uploader6.3Oracle/db/f_complete.jsp"
 		, "UrlList"			: "http://localhost:8080/Uploader6.3Oracle/db/f_list.jsp"
 		, "UrlDel"			: "http://localhost:8080/Uploader6.3Oracle/db/f_del.jsp"
@@ -124,8 +124,10 @@ function HttpUploaderMgr()
 	this.chrome = browserName.indexOf("chrome") > 0;
 	this.chrome45 = false;
 	this.nat_load = false;
-    this.chrVer = navigator.appVersion.match(/Chrome\/(\d+)/);
-    this.edge = navigator.userAgent.indexOf("Edge") > 0;
+	this.edge_load = false;
+	this.chrVer = navigator.appVersion.match(/Chrome\/(\d+)/);
+	this.ffVer = navigator.userAgent.match(/Firefox\/(\d+)/);
+	this.edge = navigator.userAgent.indexOf("Edge") > 0;
     this.edgeApp = new WebServer(this);
     this.app = up6_app;
     this.app.edgeApp = this.edgeApp;
@@ -221,14 +223,16 @@ function HttpUploaderMgr()
 	    else if (json.name == "load_complete_edge") { _this.load_complete_edge(json); }
     };
 
-    this.checkBrowser = function ()
-    {
-        //Win64
-        if (window.navigator.platform == "Win64") {
-            jQuery.extend(this.Config.ie, this.Config.ie64);
-        }
-        else if (this.firefox) {
-            if (!this.app.checkFF())//仍然支持npapi
+	this.checkBrowser = function ()
+	{
+	    //Win64
+	    if (window.navigator.platform == "Win64")
+	    {
+	        jQuery.extend(this.Config.ie, this.Config.ie64);
+	    }
+	    if (this.firefox)
+	    {
+	        if (!this.app.checkFF() || parseInt(this.ffVer[1]) >= 50)//仍然支持npapi
             {
                 this.edge = true;
                 this.app.postMessage = this.app.postMessageEdge;

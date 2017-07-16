@@ -1107,6 +1107,8 @@ function HttpUploaderMgr()
 	    var fd = this.addFolderLoc(fileSvr);
         fd.folderInit = true;
         fd.Scaned = true;
+        fd.ui.size.text(fileSvr.sizeLoc);
+        fd.ui.percent.text(fileSvr.perSvr);
 	    //
 		if (null == fileSvr.files)
 		{

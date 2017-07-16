@@ -1,5 +1,6 @@
 package up6;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -18,6 +19,9 @@ public class FileBlockWriter {
 	{
 		try 
 		{
+			File ps = new File(pathSvr);
+			PathTool.createDirectory(ps.getParent());
+			
 		    RandomAccessFile raf = new RandomAccessFile(pathSvr, "rw");
 		    raf.setLength(1);//
 		    raf.close();
@@ -31,9 +35,12 @@ public class FileBlockWriter {
 	public void write(long offset,String pathSvr,FileItem block)
 	{		
 		//根据索引将文件块数据写入到在服务端文件中
-		try {
+		try 
+		{
+			XDebug.Output("文件块大小",block.getSize());
 			InputStream stream = block.getInputStream();			
 			byte[] data = new byte[(int)block.getSize()];
+			stream.read(data);
 			stream.close();			
 			
 			//bug:在部分服务器中会出现错误：(另一个程序正在使用此文件，进程无法访问。)

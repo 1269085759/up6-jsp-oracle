@@ -100,7 +100,7 @@ public class DBFile {
 		sb.append(",f_lenSvr");
 		sb.append(",f_perSvr");
 		sb.append(" from up6_files");
-		sb.append(" where f_uid=? and f_deleted=0 and f_complete=0 and f_pidRoot is null");
+		sb.append(" where f_uid=? and f_deleted=0 and f_complete=0 and f_fdChild=0");
 
 		ArrayList<FileInf> files = new ArrayList<FileInf>();
 		DbHelper db = new DbHelper();

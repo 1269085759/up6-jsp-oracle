@@ -37,7 +37,6 @@ public class FileBlockWriter {
 		//根据索引将文件块数据写入到在服务端文件中
 		try 
 		{
-			XDebug.Output("文件块大小",block.getSize());
 			InputStream stream = block.getInputStream();			
 			byte[] data = new byte[(int)block.getSize()];
 			stream.read(data);

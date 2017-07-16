@@ -156,7 +156,6 @@ function FolderUploader(fdLoc, mgr)
         //文件大小超过限制,文件大小为0
         if (4 == json.value || 5 == json.value){}
         if (6 == json.value) { this.ui.msg.text("文件被占用:" + json.pathLoc); }
-        debugMsg(JSON.stringify(json));
 
         this.ui.btn.stop.hide();
         this.ui.btn.post.show();

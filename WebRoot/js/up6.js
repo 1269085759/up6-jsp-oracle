@@ -121,7 +121,7 @@ function HttpUploaderMgr()
         , ie: {
               drop: { clsid: "0868BADD-C17E-4819-81DE-1D60E5E734A6", name: "Xproer.HttpDroper6" }
             , part: { clsid: "BA0B719E-F4B7-464b-A664-6FC02126B652", name: "Xproer.HttpPartition6" }
-            , path: "http://www.ncmem.com/download/up6.2/up6.cab"
+            , path: "http://www.ncmem.com/download/up6.2/guid/up6.cab"
         }
 	    //x64
         , ie64: {

@@ -24,6 +24,7 @@ public class fd_uuid_appender extends fd_appender
     public void save() throws IOException, SQLException
     {   
         this.m_root.pathSvr = this.pb.genFolder(this.m_root.uid, this.m_root.nameLoc);
+        this.m_root.pathSvr = this.m_root.pathSvr.replace("\\", "/");
         PathTool.createDirectory(this.m_root.pathSvr);
 
         this.save_file(this.m_root);
@@ -33,7 +34,7 @@ public class fd_uuid_appender extends fd_appender
         for(FileInf fd : this.m_root.folders)
         {
         	fd.pathSvr = PathTool.combine(this.m_root.pathSvr, fd.pathRel);
-        	fd.pathSvr.replace("\\", "/");
+        	fd.pathSvr = fd.pathSvr.replace("\\", "/");
         	PathTool.createDirectory(fd.pathSvr);
         	this.save_folder( fd);
         }
@@ -42,7 +43,7 @@ public class fd_uuid_appender extends fd_appender
         {
         	f.nameSvr = f.nameLoc;
         	f.pathSvr = PathTool.combine(this.m_root.pathSvr, f.pathRel);
-        	f.pathSvr.replace("\\", "/");
+        	f.pathSvr = f.pathSvr.replace("\\", "/");
         	f.fdChild = true;
     		FileBlockWriter fr = new FileBlockWriter();
     		fr.CreateFile(f.pathSvr);		

@@ -14,18 +14,4 @@ CREATE TABLE down_files
 	,f_complete     number(1) 	DEFAULT '0'  	 --是否已下载完成。	
 	,f_pidRoot		number 		DEFAULT '0'		 --文件夹根级ID
 	,f_fdTask		number(1) 	DEFAULT '0'		 --是否是文件夹
-);
-
---创建主键
-ALTER TABLE down_files ADD CONSTRAINT PK_down_files PRIMARY KEY(f_idSvr);
-
---创建自动编号列
---DROP SEQUENCE SEQ_dn_f_idSvr
-CREATE SEQUENCE SEQ_dn_f_idSvr
-       MINVALUE 1
-       START WITH 1
-       NOMAXVALUE
-       INCREMENT BY 1
-       NOCYCLE
-       CACHE 30
-;
+)

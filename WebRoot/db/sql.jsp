@@ -87,14 +87,13 @@ if(dir.exists())
 				}
 				String sb = buffer.toString();
 				db.ExecuteNonQuery(sb);
-				//XDebug.Output("sql",sb);
-				XDebug.Output("sql",file.getName());
+				//XDebug.Output("sql",file.getName());
 			}
 		}
 	}
 }
 
-/*dir = new File(downDir);
+dir = new File(downDir);
 if(dir.exists())
 {
 	File[] files = dir.listFiles();
@@ -114,10 +113,11 @@ if(dir.exists())
 				}
 				String sb = buffer.toString();
 				db.ExecuteNonQuery(sb);
+				//XDebug.Output("sql",file.getName());
 			}
 		}
 	}
-}*/
+}
 out.write("数据库初始化完毕");
 %>
 

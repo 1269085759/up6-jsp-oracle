@@ -11,7 +11,6 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 
-
 String pathCur = application.getRealPath(request.getServletPath());
 String pathParent = new File(pathCur).getParent();
 pathParent = new File(pathParent).getParent();
@@ -27,18 +26,6 @@ for(String str : clear_type)
 	if(i > 0)
 	{
 		String sql_drop = "DROP TYPE " + str;
-		db.ExecuteNonQuery(sql_drop);
-	}
-}
-
-String[] clear_sequence = {"SEQ_DN_F_IDSVR","SEQ_DN_FD_ID"};
-for(String str : clear_sequence)
-{
-	String sql = "select count(*) from user_objects where object_type='SEQUENCE' and object_name = '" + str + "'";
-	int i = db.ExecuteScalar(sql);
-	if(i > 0)
-	{
-		String sql_drop = "DROP SEQUENCE " + str;
 		db.ExecuteNonQuery(sql_drop);
 	}
 }
@@ -87,33 +74,10 @@ if(dir.exists())
 				}
 				String sb = buffer.toString();
 				db.ExecuteNonQuery(sb);
-				//XDebug.Output("sql",file.getName());
-			}
-		}
-	}
-}
-
-dir = new File(downDir);
-if(dir.exists())
-{
-	File[] files = dir.listFiles();
-	if(files.length > 0)
-	{
-		for(File file : files)
-		{
-			if(file.getName().endsWith(".sql"))
-			{
-				InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "UTF-8");
-				BufferedReader reader = new BufferedReader(isr);
-				StringBuffer buffer = new StringBuffer();
-				String text;
-				while((text = reader.readLine()) != null)
-				{
-					buffer.append(text + "\n");
-				}
-				String sb = buffer.toString();
-				db.ExecuteNonQuery(sb);
-				//XDebug.Output("sql",file.getName());
+				reader.close();
+				isr.close();				
+				//XDebug.Output("sql",sb);
+				XDebug.Output("sql",file.getName());
 			}
 		}
 	}

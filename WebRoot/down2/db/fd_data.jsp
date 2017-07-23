@@ -1,7 +1,8 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%><%@ 
 	page contentType="text/html;charset=UTF-8"%><%@ 
-	page import="down2.biz.*" %><%@
+	page import="down2.biz.*" %><%@  
 	page import="down2.model.*" %><%@
+	page import="up6.*" %><%@  
 	page import="java.net.URLDecoder" %><%@ 
 	page import="java.net.URLEncoder" %><%@ 
 	page import="org.apache.commons.lang.*" %><%@ 
@@ -11,31 +12,26 @@
 	page import="com.google.gson.annotations.SerializedName" %><%@ 
 	page import="java.io.*" %><%
 /*
-	列出所有已经上传完的文件和文件夹列表
-	主要从up6_files中读取数据
+	
+    从up6_files中获取文件夹文件列表
 	更新记录：
-		2012-05-24 完善
-		2012-06-29 增加创建文件逻辑，
+		2015-05-13 创建
 		2016-07-29 更新
 */
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 
-String uid 		 = request.getParameter("uid");
-String cbk  	 = request.getParameter("callback");//jsonp
+String id	= request.getParameter("id");
+String cbk	= request.getParameter("callback");
+String json = cbk + "({\"value\":null})";
 
-if (!StringUtils.isEmpty(uid))
+if (  !StringUtils.isEmpty(id)	)
 {
-	DnFile db = new DnFile();	
-	String json = db.all_complete(Integer.parseInt(uid));
-	if(!StringUtils.isBlank(json))
-	{
-		System.out.println("上传文件列表："+json);
-		json = URLEncoder.encode(json,"utf-8");
-		json = json.replace("+","%20");
-		out.write(cbk + "({\"value\":\""+json+"\"})");
-		return;
-	}
+	String data = DnFolder.all_file(id);
+	//XDebug.Output("文件列表",data);
+	data = URLEncoder.encode(data,"utf-8");
+	data = data.replace("+","%20");
+	json = cbk + "({\"value\":\""+data+"\"})";
 }
-out.write(cbk+"({\"value\":null})");
+out.write(json);
 %>

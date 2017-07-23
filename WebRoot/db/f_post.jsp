@@ -96,5 +96,4 @@ if(Integer.parseInt(blockSize) == rangeFile.getSize())
 else
 {
 	out.write("block size error");
-}			
-%>
+}%>

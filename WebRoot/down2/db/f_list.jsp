@@ -21,10 +21,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 String uid 		 = request.getParameter("uid");
 String cbk		 = request.getParameter("callback");
 
-if (!StringUtils.isBlank(uid))
+if (!StringUtils.isEmpty(uid))
 {
-	un_builder fd = new un_builder();
-	String json = fd.read(uid);
+	String json = DnFile.all_uncmp( Integer.parseInt(uid));
 	
 	if(!StringUtils.isBlank(json))
 	{

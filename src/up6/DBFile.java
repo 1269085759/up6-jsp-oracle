@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import up6.model.FileInf;
-import up6.model.FolderInf;
 import net.sf.json.JSONArray;
 import com.google.gson.Gson;
 

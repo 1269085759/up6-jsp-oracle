@@ -2,11 +2,12 @@ package down2.biz;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import down2.model.DnFileInf;
-import down2.model.DnFolderInf;
+import java.util.ArrayList;
+import java.util.UUID;
 
 import up6.DbHelper;
+import com.google.gson.Gson;
+import down2.model.DnFileInf;
 
 public class DnFile 
 {
@@ -14,123 +15,61 @@ public class DnFile
 	{
 	}
 	
-	/**
-	 * 获取文件信息
-	 * @param fid
-	 * @return
-	 */
-	public down2.model.DnFileInf Find(int fid)
-	{		
-		String sql = "select * from down_files where f_idSvr=?";
-		DbHelper db = new DbHelper();
-		PreparedStatement cmd = db.GetCommand(sql);
-		try
-		{
-			down2.model.DnFileInf inf 	= new DnFileInf();
-			cmd.setInt(1, fid);
-			ResultSet r = db.ExecuteDataSet(cmd);
-			if(r.next())
-			{
-				inf.idSvr 		= fid;
-				inf.lenLoc 	= r.getLong(6);
-				inf.lenSvr 	= r.getLong(7);
-				inf.mac 		= r.getString(3);
-				inf.pathLoc 	= r.getString(4);
-				inf.fileUrl 	= r.getString(5);
-				
-				cmd.close();
-				cmd.getConnection().close();
-			}
-			
-			return inf;
-		}
-		catch(SQLException e){e.printStackTrace();}
-		return null;
-	}
-
-    public int Add(down2.model.DnFileInf inf)
+    public void Add(down2.model.DnFileInf inf)
     {
-    	int idSvr = 0;
         StringBuilder sb = new StringBuilder();
-        sb.append("insert into down_files(");
-        sb.append(" f_idSvr");
+        sb.append("insert into down_files(");        
+        sb.append(" f_id");
         sb.append(",f_uid");
         sb.append(",f_nameLoc");
         sb.append(",f_pathLoc");
         sb.append(",f_fileUrl");
         sb.append(",f_lenSvr");
         sb.append(",f_sizeSvr");
+        sb.append(",f_fdTask");
+        
         sb.append(") values(");
-        sb.append(" SEQ_dn_f_idSvr.NEXTVAL");//fid
+        
+        sb.append(" ?");//id
         sb.append(",?");//uid
-        sb.append(",?");//name
+        sb.append(",?");//nameLoc
         sb.append(",?");//pathLoc
-        sb.append(",?");//pathSvr
+        sb.append(",?");//fileUrl
         sb.append(",?");//lenSvr
         sb.append(",?");//sizeSvr
+        sb.append(",?");//fdTask
         sb.append(")");
 		
 		DbHelper db = new DbHelper();
-		PreparedStatement cmd = db.GetCommand(sb.toString(),"f_idSvr");
+		PreparedStatement cmd = db.GetCommandPK(sb.toString());
 
 		try
 		{
-			cmd.setInt(1,inf.uid);
-			cmd.setString(2,inf.nameLoc);
-			cmd.setString(3,inf.pathLoc);
-			cmd.setString(4,inf.fileUrl);
-			cmd.setLong(5,inf.lenSvr);
-			cmd.setString(6,inf.sizeSvr);
-			idSvr = (int) db.ExecuteGenKey(cmd);			
+			cmd.setString(1,inf.id);
+			cmd.setInt(2,inf.uid);
+			cmd.setString(3,inf.nameLoc);
+			cmd.setString(4,inf.pathLoc);
+			cmd.setString(5,inf.fileUrl);
+			cmd.setLong(6,inf.lenSvr);
+			cmd.setString(7,inf.sizeSvr);
+			cmd.setBoolean(8,inf.fdTask);
+			db.ExecuteNonQuery(cmd);			
 		}
-		catch (SQLException e){e.printStackTrace();}		
+		catch (SQLException e){e.printStackTrace();}	
 
-		return idSvr;
-    }
-    
-    /**
-     * 添加一个文件夹下载任务
-     * @param inf
-     * @return
-     */
-    public static int Add(DnFolderInf inf)
-    {
-    	int idSvr = 0;
-        StringBuilder sb = new StringBuilder();
-        sb.append("insert into down_files(");
-        sb.append(" f_idSvr");
-        sb.append(" f_uid");
-        sb.append(",f_pathLoc");
-        sb.append(") values(");
-        sb.append(" SEQ_dn_f_idSvr.NEXTVAL");//fid
-        sb.append(" ?");//uid
-        sb.append(",?");//pathLoc
-        sb.append(")");
-		
-		DbHelper db = new DbHelper();
-		PreparedStatement cmd = db.GetCommand(sb.toString(),"f_idSvr");
-
-		try
-		{
-			cmd.setInt(1,inf.uid);
-			cmd.setString(2,inf.pathLoc);
-			idSvr = (int)db.ExecuteGenKey(cmd);
-		}
-		catch (SQLException e){e.printStackTrace();}
-		return idSvr;    	
     }
 
     /**
      * 将文件设为已完成
      * @param fid
      */
-    public void Complete(int fid)
+    public void Complete(String fid)
     {
 		DbHelper db = new DbHelper();
-		PreparedStatement cmd = db.GetCommand("update down_files set f_complete=1 where f_idSvr=?");
+		PreparedStatement cmd = db.GetCommand("update down_files set f_complete=1 where f_id=?");
 		try
 		{
-			cmd.setInt(1,fid);
+			cmd.setString(1,fid);
 		}
 		catch (SQLException e)
 		{
@@ -143,53 +82,21 @@ public class DnFile
     /// 删除文件
     /// </summary>
     /// <param name="fid"></param>
-    public void Delete(int fid,int uid,String mac)
+    public static void Delete(String fid,int uid)
     {
-        String sql = "delete from down_files where f_idSvr=? and f_uid=? and f_mac=?";
+        String sql = "delete from down_files where f_id=? and f_uid=?";
         DbHelper db = new DbHelper();
 		PreparedStatement cmd = db.GetCommand(sql);
 
 		try
 		{
-			cmd.setInt(1,fid);
-			cmd.setInt(2,uid);
-			cmd.setString(3,mac);
+			cmd.setString(1,fid);
+			cmd.setInt(2,uid);			
 			db.ExecuteNonQuery(cmd);
 		}
 		catch (SQLException e){e.printStackTrace();}
     }
     
-    public static void Delete(String fid,String uid)
-    {
-        String sql = "delete from down_files where f_idSvr=? and f_uid=?";
-        DbHelper db = new DbHelper();
-		PreparedStatement cmd = db.GetCommand(sql);
-
-		try
-		{
-			cmd.setInt(1,Integer.parseInt(fid) );
-			cmd.setInt(2,Integer.parseInt(uid) );
-			db.ExecuteNonQuery(cmd);
-		}
-		catch (SQLException e){e.printStackTrace();}
-    }
-    
-    //删除文件夹的所有子文件
-    public static void delFiles(String pidRoot,String uid)
-    {
-        String sql = "delete from down_files where f_pidRoot=? and f_uid=?";
-        DbHelper db = new DbHelper();
-		PreparedStatement cmd = db.GetCommand(sql);
-
-		try
-		{
-			cmd.setInt(1,Integer.parseInt(pidRoot) );
-			cmd.setInt(2,Integer.parseInt(uid) );
-			db.ExecuteNonQuery(cmd);
-		}
-		catch (SQLException e){e.printStackTrace();}    	
-    }
-
     /**
      * 更新文件进度信息
      * @param fid
@@ -197,9 +104,9 @@ public class DnFile
      * @param mac
      * @param lenLoc
      */
-    public void updateProcess(int fid,int uid,String lenLoc,String perLoc)
+    public void process(String fid,int uid,String lenLoc,String perLoc)
     {
-        String sql = "update down_files set f_lenLoc=?,f_perLoc=? where f_idSvr=? and f_uid=?";
+        String sql = "update down_files set f_lenLoc=?,f_perLoc=? where f_id=? and f_uid=?";
         DbHelper db = new DbHelper();
 		PreparedStatement cmd = db.GetCommand(sql);
 
@@ -207,7 +114,7 @@ public class DnFile
 		{
 			cmd.setString(1,lenLoc);
 			cmd.setString(2,perLoc);
-			cmd.setInt(3,fid);
+			cmd.setString(3,fid);
 			cmd.setInt(4,uid);
 			
 			db.ExecuteNonQuery(cmd);
@@ -216,7 +123,101 @@ public class DnFile
 		{
 			e.printStackTrace();
 		}
-    }    
+    }
+
+    /// <summary>
+    /// 获取所有未下载完的文件列表
+    /// </summary>
+    /// <returns></returns>
+    public static String all_uncmp(int uid)
+    {
+    	StringBuilder sb = new StringBuilder();
+        sb.append("select ");
+        sb.append(" f_id");
+        sb.append(",f_nameLoc");
+        sb.append(",f_pathLoc");
+        sb.append(",f_perLoc");
+        sb.append(",f_sizeSvr");
+        sb.append(",f_fdTask");
+        sb.append(" from down_files");
+        sb.append(" where f_uid=? and f_complete=0");
+
+        ArrayList<DnFileInf> files = new ArrayList<DnFileInf>();
+		DbHelper db = new DbHelper();
+		PreparedStatement cmd = db.GetCommand(sb.toString());
+		try
+		{
+			cmd.setInt(1,uid);
+			ResultSet r = db.ExecuteDataSet(cmd);
+			while (r.next())
+			{
+				DnFileInf f		= new DnFileInf();
+				f.id			= r.getString(1);
+				f.nameLoc		= r.getString(2);
+				f.pathLoc		= r.getString(3);
+				f.perLoc		= r.getString(4);
+				f.sizeSvr		= r.getString(5);
+				f.fdTask		= r.getBoolean(6);
+			    
+				files.add(f);
+			}
+			cmd.close();//auto close ResultSet
+		}
+		catch (SQLException e){e.printStackTrace();}
+
+        Gson g = new Gson();
+	    return g.toJson( files );
+	}
+    
+    /**
+     * 从up6_files表中获取已经上传完的数据
+     * @param uid
+     * @return
+     */
+    public String all_complete(int uid)
+    {
+    	ArrayList<DnFileInf> files = new ArrayList<DnFileInf>();
+    	StringBuilder sb = new StringBuilder();
+        sb.append("select ");
+        sb.append(" f_id");//0
+        sb.append(",f_fdTask");//1
+        sb.append(",f_nameLoc");//2
+        sb.append(",f_sizeLoc");//3
+        sb.append(",f_lenSvr");//4
+        sb.append(",f_pathSvr");//5
+        sb.append(" from up6_files ");
+        //
+        sb.append(" where f_uid=? and f_deleted=0 and f_complete=1 and f_fdChild=0");
+		DbHelper db = new DbHelper();
+		PreparedStatement cmd = db.GetCommand(sb.toString());
+		try
+		{
+			cmd.setInt(1,uid);
+			ResultSet r = db.ExecuteDataSet(cmd);
+			while (r.next())
+			{
+				DnFileInf f		= new DnFileInf();
+				String uuid = UUID.randomUUID().toString();
+				uuid = uuid.replace("-", "");
+
+				f.id			= uuid;
+				f.f_id			= r.getString(1);
+				f.fdTask		= r.getBoolean(2);
+				f.nameLoc		= r.getString(3);
+				f.sizeSvr		= r.getString(4);
+				f.lenSvr		= r.getLong(5);
+				f.pathSvr		= r.getString(6);
+			    
+				files.add(f);
+			}
+			cmd.close();//auto close ResultSet
+		}
+		catch (SQLException e){e.printStackTrace();}
+
+        Gson g = new Gson();
+	    return g.toJson( files );
+    	
+    }
     
     public static void Clear()
     {

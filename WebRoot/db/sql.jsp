@@ -82,6 +82,35 @@ if(dir.exists())
 		}
 	}
 }
+
+dir = new File(downDir);
+if(dir.exists())
+{
+	File[] files = dir.listFiles();
+	if(files.length > 0)
+	{
+		for(File file : files)
+		{
+			if(file.getName().endsWith(".sql"))
+			{
+				InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "UTF-8");
+				BufferedReader reader = new BufferedReader(isr);
+				StringBuffer buffer = new StringBuffer();
+				String text;
+				while((text = reader.readLine()) != null)
+				{
+					buffer.append(text + "\n");
+				}
+				String sb = buffer.toString();
+				db.ExecuteNonQuery(sb);
+				reader.close();
+				isr.close();				
+				//XDebug.Output("sql",sb);
+				XDebug.Output("sql",file.getName());
+			}
+		}
+	}
+}
 out.write("数据库初始化完毕");
 %>
 

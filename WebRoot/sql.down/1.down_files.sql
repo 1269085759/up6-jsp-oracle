@@ -1,7 +1,7 @@
 --drop table down_files
 CREATE TABLE down_files
 (
-	 f_idSvr   		number NOT NULL    
+	 f_id   		varchar2(32) NOT NULL    
 	,f_uid        	number DEFAULT '0'       --用户ID
 	,f_mac        	varchar(50)  DEFAULT  '' --MAC地址，用来识别不同电脑的下载任务
 	,f_nameLoc		varchar(255) DEFAULT  ''
@@ -12,6 +12,5 @@ CREATE TABLE down_files
 	,f_lenSvr    	number(19) 	DEFAULT 0  	 --服务器文件长度
 	,f_sizeSvr		varchar(10) DEFAULT '0'
 	,f_complete     number(1) 	DEFAULT '0'  	 --是否已下载完成。	
-	,f_pidRoot		number 		DEFAULT '0'		 --文件夹根级ID
 	,f_fdTask		number(1) 	DEFAULT '0'		 --是否是文件夹
 )

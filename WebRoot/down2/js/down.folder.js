@@ -26,7 +26,8 @@
         , fdTask: true
         , files:null
     };
-    jQuery.extend(this.fileSvr, fileLoc);//覆盖配置
+    var url = this.Config["UrlDown"] + "?" + this.Manager.to_params(this.fields)
+    jQuery.extend(this.fileSvr, fileLoc,{fileUrl:url});//覆盖配置
 
     this.hideBtns = function ()
     {
@@ -171,12 +172,17 @@
                 _this.ui.btn.down.show();
                 _this.ui.msg.text("初始化完毕...");
                 _this.svr_inited = true;
+                _this.svr_create_cmp();
             }
             , error: function (req, txt, err) { alert("创建信息失败！" + req.responseText); }
             , complete: function (req, sta) { req = null; }
         });
     };
-
+    this.svr_create_cmp = function () {
+        setTimeout(function () {
+            _this.down();
+        }, 200);
+    };
     this.isComplete = function () { return this.State == HttpDownloaderState.Complete; };
     this.svr_delete = function ()
     {

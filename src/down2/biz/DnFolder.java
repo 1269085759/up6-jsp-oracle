@@ -19,7 +19,7 @@ public class DnFolder
     public static void Clear()
     {
 		DbHelper db = new DbHelper();
-		db.ExecuteNonQuery("truncate table down_folders");
+		//db.ExecuteNonQuery("truncate table down_folders");
 		db.ExecuteNonQuery("truncate table down_files");
     }
     

@@ -62,7 +62,8 @@ function FileDownloader(fileLoc, mgr)
         this.hideBtns();
         this.ui.btn.down.show();
         this.ui.btn.cancel.show();
-        //this.pButton.style.display = "none";
+        this.ui.ico.file.show();
+        this.ui.ico.fd.hide();
         this.ui.msg.text("正在下载队列中等待...");
         this.State = HttpDownloaderState.Ready;
     };
@@ -109,7 +110,8 @@ function FileDownloader(fileLoc, mgr)
     //在出错，停止中调用
     this.svr_update = function ()
     {
-        var param = jQuery.extend({}, this.fields, this.fileSvr, { time: new Date().getTime() });
+        var param = jQuery.extend({}, this.fields, { time: new Date().getTime() });
+        jQuery.extend(param, { id: this.fileSvr.id, lenLoc: this.fileSvr.lenLoc, perLoc: encodeURIComponent(this.fileSvr.perLoc) });
         $.ajax({
             type: "GET"
             , dataType: 'jsonp'

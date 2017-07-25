@@ -126,7 +126,7 @@
     this.svr_update = function (json)
     {
         var param = jQuery.extend({}, this.fields, { time: new Date().getTime() });
-        jQuery.extend(param, { id: this.fileSvr.id, lenLoc: this.fileSvr.lenLoc, perLoc: this.fileSvr.perLoc });
+        jQuery.extend(param, { id: this.fileSvr.id, lenLoc: this.fileSvr.lenLoc, perLoc: encodeURIComponent(this.fileSvr.perLoc) });
 
         $.ajax({
             type: "GET"
@@ -246,7 +246,7 @@
         this.event.downError(this, json.code);//biz event
         this.ui.msg.text(DownloadErrorCode[json.code+""]);
         this.State = HttpDownloaderState.Error;
-        //this.SvrUpdate();
+        this.svr_update();
     };
 
     this.down_stoped = function (json)

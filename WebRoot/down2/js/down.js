@@ -215,7 +215,7 @@ function DownloaderMgr()
         var ui_eles = { ico: { file: uiIcoF, fd: uiIcoFD }, msg: uiMsg, name: uiName, size: uiSize, process: uiProcess, percent: uiPercent, btn: { cancel: btnCancel, stop: btnStop, down: btnDown, del: btnDel, open: btnOpen }, div: ui, split: sp };
 
         var downer;
-        if (f.fdTask) { downer = new FdDownloader(f, this); }
+        if (f.fdTask) { downer = new FdDownloader(f, this);}
 	    else { downer = new FileDownloader(f,this);}
 	    this.filesMap[f.id] = downer;//
 	    jQuery.extend(downer.ui, ui_eles);
@@ -240,13 +240,6 @@ function DownloaderMgr()
 	    var obj = this.add_ui(fdSvr);
 	    if (null == obj) return;
         obj.svr_inited = true;
-
-	    obj.ui.ico.file.hide();
-	    obj.ui.ico.fd.show();
-	    obj.ui.name.text(fdSvr.nameLoc);
-	    obj.ui.size.text(fdSvr.sizeSvr);
-	    obj.ui.process.css("width", fdSvr.perLoc);
-	    obj.ui.percent.text("(" + fdSvr.perLoc + ")");
 	    
 	    return obj;
     };
@@ -254,13 +247,6 @@ function DownloaderMgr()
         var obj = this.add_ui(f);
         if (null == obj) return;
         obj.svr_inited = true;
-
-        obj.ui.ico.file.hide();
-        obj.ui.ico.fd.show();
-        obj.ui.name.text(f.nameLoc);
-        obj.ui.size.text(f.sizeSvr);
-        obj.ui.process.css("width", f.perLoc);
-        obj.ui.percent.text("(" + f.perLoc + ")");
 
         return obj;
     };
@@ -281,8 +267,6 @@ function DownloaderMgr()
         var obj = this.add_ui(f);
         if (null == obj) return;
 
-        obj.ui.ico.file.hide();
-        obj.ui.ico.fd.show();
         this.init_file(obj.fileSvr);//
         return obj;
     };
@@ -291,8 +275,6 @@ function DownloaderMgr()
 	    var obj = this.add_ui(f);
 	    if (null == obj) return;
 
-	    obj.ui.ico.file.hide();
-	    obj.ui.ico.fd.show();
         obj.load_files();//
 	    return obj;
 	};

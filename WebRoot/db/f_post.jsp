@@ -74,8 +74,7 @@ while (fileItr.hasNext())
 }
 
 //参数为空 
-if(	 StringUtils.isBlank( lenSvr )
-	|| StringUtils.isBlank( uid )
+if(	 StringUtils.isBlank( uid )
 	|| StringUtils.isBlank( id )
 	|| StringUtils.isBlank( blockOffset ) 
 	|| StringUtils.isBlank(pathSvr))

@@ -70,6 +70,20 @@ function FolderUploader(fdLoc, mgr)
         });
         this.ui.btn.post.show();
     };
+    this.svr_remove = function ()
+    {
+        var param = { uid: this.fields["uid"], id: this.id, time: new Date().getTime() };
+        $.ajax({
+            type: "GET"
+            , dataType: 'jsonp'
+            , jsonp: "callback" //自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
+            , url: this.Config["UrlFdDel"]
+            , data: param
+            , success: function (msg) { }
+            , error: function (req, txt, err) { alert("删除文件夹失败！" + req.responseText); }
+            , complete: function (req, sta) { req = null; }
+        });
+    };
     //上传，创建文件夹结构信息
     this.post = function ()
     {
@@ -318,6 +332,7 @@ function FolderUploader(fdLoc, mgr)
     {
         this.app.delFolder({ id: this.id });
         this.manager.Delete(this.id);
+        this.svr_remove();
         this.ui.div.remove();
         this.ui.split.remove();
     };

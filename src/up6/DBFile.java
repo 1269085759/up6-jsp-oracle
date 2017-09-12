@@ -2,6 +2,10 @@ package up6;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+import com.google.gson.Gson;
+
 import up6.model.FileInf;
 
 /*
@@ -17,6 +21,66 @@ public class DBFile {
 
 	public DBFile()
 	{
+	}
+	
+
+	
+	static public String GetAllUnComplete(int uid)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("select ");
+		sb.append(" f_id");
+		sb.append(",f_fdTask");
+		sb.append(",f_nameLoc");
+		sb.append(",f_nameSvr");
+		sb.append(",f_pathLoc");
+		sb.append(",f_pathSvr");
+		sb.append(",f_pathRel");
+		sb.append(",f_md5");
+		sb.append(",f_lenLoc");
+		sb.append(",f_sizeLoc");
+		sb.append(",f_pos");
+		sb.append(",f_lenSvr");
+		sb.append(",f_perSvr");
+		sb.append(" from up6_files");
+		sb.append(" where f_uid=? and f_deleted=0 and f_complete=0 and f_fdChild=0");
+
+		ArrayList<FileInf> files = new ArrayList<FileInf>();
+		DbHelper db = new DbHelper();
+		PreparedStatement cmd = db.GetCommand(sb.toString());
+		try {
+			cmd.setInt(1, uid);
+			ResultSet r = db.ExecuteDataSet(cmd);
+			while(r.next())
+			{
+				FileInf f 		= new FileInf();
+				f.uid			= uid;
+				f.id 			= r.getString(1);
+				f.fdTask 		= r.getBoolean(2);				
+				f.nameLoc 		= r.getString(3);
+				f.nameSvr		= r.getString(4);
+				f.pathLoc 		= r.getString(5);
+				f.pathSvr 		= r.getString(6);
+				f.pathRel 		= r.getString(7);
+				f.md5 			= r.getString(8);
+				f.lenLoc 		= r.getLong(9);
+				f.sizeLoc 		= r.getString(10);
+				f.offset 		= r.getLong(11);
+				f.lenSvr 		= r.getLong(12);
+				f.perSvr 		= r.getString(13);
+				files.add(f);
+				
+			}
+			r.close();
+			cmd.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(files.size() < 1) return null;
+		Gson g = new Gson();
+	    return g.toJson( files );//bug:arrFiles为空时，此行代码有异常	
 	}
 
 	/// <summary>

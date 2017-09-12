@@ -3,10 +3,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import com.google.gson.Gson;
-
 import up6.model.FileInf;
+import com.google.gson.Gson;
 
 /*
  * 原型
@@ -22,9 +20,7 @@ public class DBFile {
 	public DBFile()
 	{
 	}
-	
 
-	
 	static public String GetAllUnComplete(int uid)
 	{
 		StringBuilder sb = new StringBuilder();
@@ -82,7 +78,7 @@ public class DBFile {
 		Gson g = new Gson();
 	    return g.toJson( files );//bug:arrFiles为空时，此行代码有异常	
 	}
-
+	
 	/// <summary>
 	/// 根据文件MD5获取文件信息
 	/// </summary>

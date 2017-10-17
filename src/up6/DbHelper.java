@@ -157,7 +157,7 @@ public class DbHelper {
 			if(autoClose)
 			{
 				cmd.close();
-				//cmd.getConnection().close();
+				cmd.getConnection().close();
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -177,8 +177,8 @@ public class DbHelper {
 			PreparedStatement cmd = this.GetCommand(sql);
 			//cmd.execute();
 			cmd.executeUpdate();
-			//cmd.getConnection().close();
 			cmd.close();
+			cmd.getConnection().close();
 		} 
 		catch (SQLException e) 
 		{

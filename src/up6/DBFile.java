@@ -381,7 +381,9 @@ public class DBFile {
 				inf.deleted 		= r.getBoolean(15);
 				ret = true;
 			}
+			r.close();
 			cmd.close();
+			cmd.getConnection().close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

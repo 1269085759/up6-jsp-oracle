@@ -116,11 +116,8 @@ public class DBFile {
 
 		DbHelper db = new DbHelper();
 		PreparedStatement cmd = db.GetCommand(sb.toString());
-		//ResultSet r = db.ExecuteDataSet(sb.toString());
 		try {
 			ResultSet r = cmd.executeQuery();
-			//cmd.setString(1, md5);
-			//ResultSet r = db.ExecuteDataSet(cmd);
 			if (r.next())
 			{
 				fileSvr.id 				= r.getString(1);

@@ -1,9 +1,11 @@
 package up6;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import up6.model.FileInf;
+
 import com.google.gson.Gson;
 
 /*
@@ -69,6 +71,7 @@ public class DBFile {
 			}
 			r.close();
 			cmd.close();
+			cmd.getConnection().close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -113,8 +116,10 @@ public class DBFile {
 		sb.append(" order by to_number(f_lenSvr) DESC");
 
 		DbHelper db = new DbHelper();
-		ResultSet r = db.ExecuteDataSet(sb.toString());
+		PreparedStatement cmd = db.GetCommand(sb.toString());
+		//ResultSet r = db.ExecuteDataSet(sb.toString());
 		try {
+			ResultSet r = cmd.executeQuery();
 			//cmd.setString(1, md5);
 			//ResultSet r = db.ExecuteDataSet(cmd);
 			if (r.next())
@@ -138,7 +143,8 @@ public class DBFile {
 				ret = true;
 			}
 			r.close();
-			//cmd.close();			
+			cmd.close();
+			cmd.getConnection().close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -323,5 +329,68 @@ public class DBFile {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 根据文件ID获取文件信息
+	 * @param fid
+	 * @param inf
+	 * @return
+	 */
+	public boolean GetFileInfByFid(String fid,FileInf inf)
+	{
+		boolean ret = false;
+		StringBuilder sb = new StringBuilder();
+		sb.append("select ");
+		sb.append("f_uid");
+		sb.append(",f_nameLoc");
+		sb.append(",f_nameSvr");
+		sb.append(",f_pathLoc");
+		sb.append(",f_pathSvr");
+		sb.append(",f_pathRel");
+		sb.append(",f_md5");
+		sb.append(",f_lenLoc");
+		sb.append(",f_sizeLoc");
+		sb.append(",f_pos");
+		sb.append(",f_lenSvr");
+		sb.append(",f_perSvr");
+		sb.append(",f_complete");
+		sb.append(",f_time");
+		sb.append(",f_deleted");
+		sb.append(" from up6_files where f_id=? ");
+		
+		DbHelper db = new DbHelper();
+		PreparedStatement cmd = db.GetCommand(sb.toString());
+		try {
+			cmd.setString(1, fid);
+			ResultSet r = db.ExecuteDataSet(cmd);
+
+			if (r.next())
+			{
+				inf.id 				= fid;
+				inf.uid 			= r.getInt(1);
+				inf.nameLoc 		= r.getString(2);
+				inf.nameSvr 		= r.getString(3);
+				inf.pathLoc 		= r.getString(4);
+				inf.pathSvr 		= r.getString(5);
+				inf.pathRel 		= r.getString(6);
+				inf.md5 			= r.getString(7);
+				inf.lenLoc 			= r.getLong(8);
+				inf.sizeLoc 		= r.getString(9);
+	            inf.offset 			= r.getLong(10);
+	            inf.lenSvr 			= r.getLong(11);
+				inf.perSvr 			= r.getString(12);
+				inf.complete 		= r.getBoolean(13);
+				inf.PostedTime 		= r.getDate(14);
+				inf.deleted 		= r.getBoolean(15);
+				ret = true;
+			}
+			cmd.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return ret;
 	}
 }

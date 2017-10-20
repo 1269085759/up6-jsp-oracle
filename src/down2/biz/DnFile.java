@@ -211,6 +211,7 @@ public class DnFile
 				files.add(f);
 			}
 			cmd.close();//auto close ResultSet
+			cmd.getConnection().close();
 		}
 		catch (SQLException e){e.printStackTrace();}
 
